@@ -1,0 +1,7 @@
+production:
+  address:
+  port:
+  user_name:
+  password:
+  authentication: 'cram_md5'
+  domain:
