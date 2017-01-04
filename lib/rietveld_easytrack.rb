@@ -3,6 +3,7 @@ require "nokogiri"
 require "hash_validator"
 
 require "rietveld_easytrack/task_management"
+require "rietveld_easytrack/text_messaging"
 
 module RietveldEasytrack
 
