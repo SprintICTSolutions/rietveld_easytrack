@@ -1,17 +1,15 @@
-# API Template
+# Rietveld Easytrack
 
-This project is based on:
+# Installation
+Add the following line to your Gemfile
 
-1. Api-template https://github.com/SprintICTSolutions/api-template
+```
+gem 'rietveld_easytrack', :git => 'https://github.com/SprintICTSolutions/rietveld_easytrack.git'
+```
 
-# Modules
+# Usage
 
 ## Task Management
-
-### Template
-Located in lib/easy_track/templates/task_management.rb
-
-This is the xml template for a task.
 
 ### Module functions
 
