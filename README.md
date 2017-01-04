@@ -29,6 +29,8 @@ Parameter format:
     name: '',
     description: '',
     sequence: '',
+    planned_start: '', # Optional
+    planned_finish: '', # Optional
     locations: [ 
       {
          code: '',
@@ -40,14 +42,20 @@ Parameter format:
            zipcode: '',
            city: '',
            country: ''
-          },
-        tasks: [
-          {
-            code: '',
-            name: '',
-            description: '',
-            type: '',
-            sequence: ''
+         },
+         coordinates: {
+           latitude: '',
+           longitude: ''
+         },
+         tasks: [
+           {
+             code: '',
+             name: '',
+             description: '',
+             type: '',
+             sequence: '',
+             planned_start: '', # Optional
+             planned_finish: '' # Optional
            },
          ]   
       },  
