@@ -5,3 +5,6 @@ gemspec
 
 # XML parser
 gem 'nokogiri'
+
+# Hash validator
+gem 'hash_validator'
