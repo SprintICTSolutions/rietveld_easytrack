@@ -1,4 +1,4 @@
-xml.operation('xlmns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02', 'xlmns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance') {
+xml.operation('xlmns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02', 'xlmns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
   xml.operationId params[:operation_id]
   xml.asset {
     xml.code params[:asset][:code]
@@ -10,6 +10,8 @@ xml.operation('xlmns' => 'http://www.easytrack.nl/integration/taskmanagement/201
         xml.name params[:trip][:name]
         xml.description params[:trip][:description]
         xml.sequence params[:trip][:sequence]
+        xml.plannedStart params[:trip][:planned_start] if params[:trip][:planned_start]
+        xml.plannedFinish params[:trip][:planned_finish] if params[:trip][:planned_finish]
         xml.locations {
           for location in params[:trip][:locations]
             xml.location{
@@ -18,12 +20,20 @@ xml.operation('xlmns' => 'http://www.easytrack.nl/integration/taskmanagement/201
               xml.description location[:description]
               xml.sequence location[:sequence]
               xml.position {
-                xml.address {
-                  xml.street location[:address][:street]
-                  xml.zipcode location[:address][:zipcode]
-                  xml.city location[:address][:city]
-                  xml.country location[:address][:country]
-                }
+                if location[:address]
+                  xml.address {
+                    xml.street location[:address][:street]
+                    xml.zipcode location[:address][:zipcode]
+                    xml.city location[:address][:city]
+                    xml.country location[:address][:country]
+                  }
+                end
+                if location[:coordinates]
+                  xml.coordinate {
+                    xml.latitude location[:coordinates][:latitude]
+                    xml.longitude location[:coordinates][:longitude]
+                  }
+                end
               }
               xml.tasks {
                 for task in location[:tasks]
@@ -33,6 +43,8 @@ xml.operation('xlmns' => 'http://www.easytrack.nl/integration/taskmanagement/201
                     xml.description task[:description]
                     xml.taskType task[:type]
                     xml.sequence task[:sequence]
+                    xml.plannedStart task[:planned_start] if task[:planned_start]
+                    xml.plannedFinish task[:planned_finish] if task[:planned_finish]
                   }
                 end
               }

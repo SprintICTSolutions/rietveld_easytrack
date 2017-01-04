@@ -2,6 +2,8 @@ PATH
   remote: .
   specs:
     rietveld_easytrack (0.1.0)
+      hash_validator
+      nokogiri
 
 GEM
   remote: https://rubygems.org/

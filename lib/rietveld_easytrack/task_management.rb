@@ -7,6 +7,9 @@ module RietveldEasytrack
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
+      File.open(File.join(RietveldEasytrack.root, '/tmp/xml.xml'), 'w') do |file|
+        file.write builder.doc.to_xml
+      end
       return builder.doc.to_xml
     end
 
@@ -26,6 +29,8 @@ module RietveldEasytrack
           name: 'Opdracht 15/09/2015 nr 572243',
           description: 'Vertrek om 16:25 uur Vertrek klant 17:20 uur',
           sequence: 10,
+          planned_start: '2011-02-01T09:00:00',
+          planned_finish: '2011-02-01T10:00:00',
           locations: [
             {
               code: 'dc608c2b-46f0-4934-a5dc-3222fe9ac8de',
@@ -43,6 +48,10 @@ module RietveldEasytrack
                 city: 'Rotterdam',
                 country: 'NL'
               },
+              coordinates: {
+                latitude: '5',
+                longitude: '50'
+              },
               tasks: [
                 {
                   code: '5d3968ac-8b4e-4b40-a7cc-358b70acf9f7',
@@ -54,7 +63,9 @@ module RietveldEasytrack
                                 Dossier 294001
                                 Adres ECT DELTA  DDW, EUROPAWEG 875, 3199 LD  ROTTERDAM, NEDERLAND',
                   type: 49,
-                  sequence: 10
+                  sequence: 10,
+                  planned_start: '2011-02-01T09:00:00',
+                  planned_finish: '2011-02-01T10:00:00'
                 }
               ]
             },
@@ -74,6 +85,8 @@ module RietveldEasytrack
           name: 'string',
           description: 'string',
           sequence: 'integer',
+          planned_start: 'string',
+          planned_finish: 'string',
           locations: 'array'
         }
       }
@@ -89,6 +102,10 @@ module RietveldEasytrack
           city: 'string',
           country: 'string'
         },
+        coordinates: {
+          longitude: 'string',
+          latitude: 'string'
+        },
         tasks: 'array'
       }
 
@@ -97,7 +114,9 @@ module RietveldEasytrack
         name: 'string',
         description: 'string',
         type: 'integer',
-        sequence: 'integer'
+        sequence: 'integer',
+        planned_start: 'string',
+        planned_finish: 'string'
       }
 
       # Validate root
