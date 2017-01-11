@@ -12,7 +12,7 @@ module RietveldEasytrack
       path = File.join(RietveldEasytrack.root, '/tmp')
       # Create tmp directory if not exists
       FileUtils.mkdir_p(path) unless File.directory?(path)
-      File.open(File.join(path, '/xml.xml', 'w') do |file|
+      File.open(File.join(path, '/xml.xml'), 'w') do |file|
         file.write builder.doc.to_xml
       end
       return builder.doc.to_xml
