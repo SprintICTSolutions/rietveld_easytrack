@@ -3,6 +3,7 @@ PATH
   specs:
     rietveld_easytrack (0.1.0)
       hash_validator
+      net-scp
       nokogiri
 
 GEM
@@ -10,6 +11,9 @@ GEM
   specs:
     hash_validator (0.7.0)
     mini_portile2 (2.1.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-ssh (4.1.0)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
     rake (10.4.2)

@@ -7,9 +7,10 @@ module RietveldEasytrack
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      File.open(File.join(RietveldEasytrack.root, '/tmp/xml.xml'), 'w') do |file|
-        file.write builder.doc.to_xml
-      end
+      # File.open(File.join(RietveldEasytrack.root, '/tmp/xml.xml'), 'w') do |file|
+      #   file.write builder.doc.to_xml
+      # end
+      RietveldEasytrack::SSH.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/text-messaging/test.xml')
       return builder.doc.to_xml
     end
 
@@ -22,7 +23,7 @@ module RietveldEasytrack
       self.send({
         operation_id: '1111',
         asset: {
-          code: '3333'
+          code: '9999'
         },
         message: {
           code: '444',

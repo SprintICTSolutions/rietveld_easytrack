@@ -2,6 +2,7 @@ require "rietveld_easytrack/version"
 require "nokogiri"
 require "hash_validator"
 
+require "rietveld_easytrack/ssh.rb"
 require "rietveld_easytrack/task_management"
 require "rietveld_easytrack/text_messaging"
 
@@ -82,5 +83,9 @@ module RietveldEasytrack
 
   def self.types
     TYPES
+  end
+
+  def self.connect
+
   end
 end
