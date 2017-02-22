@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module RietveldEasytrack
   module TaskManagement
 
@@ -7,7 +9,10 @@ module RietveldEasytrack
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      File.open(File.join(RietveldEasytrack.root, '/tmp/xml.xml'), 'w') do |file|
+      path = File.join(RietveldEasytrack.root, '/tmp')
+      # Create tmp directory if not exists
+      FileUtils.mkdir_p(path) unless File.directory?(path)
+      File.open(File.join(path, '/xml.xml'), 'w') do |file|
         file.write builder.doc.to_xml
       end
       return builder.doc.to_xml
