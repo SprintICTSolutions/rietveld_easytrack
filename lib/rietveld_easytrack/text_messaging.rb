@@ -10,7 +10,7 @@ module RietveldEasytrack
       # File.open(File.join(RietveldEasytrack.root, '/tmp/xml.xml'), 'w') do |file|
       #   file.write builder.doc.to_xml
       # end
-      RietveldEasytrack::SSH.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/text-messaging/test.xml')
+      RietveldEasytrack::SCP.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/text-messaging/test.xml')
       return builder.doc.to_xml
     end
 
@@ -19,16 +19,16 @@ module RietveldEasytrack
     end
 
 
-    def self.test
+    def self.test(message)
       self.send({
         operation_id: '1111',
         asset: {
           code: '9999'
         },
         message: {
-          code: '444',
-          content: 'text message',
-          timestamp: '2011-02-01T09:00:00'
+          code: rand.to_s[2..11],
+          content: message,
+          timestamp: Time.now.utc.iso8601
         }
       })
     end

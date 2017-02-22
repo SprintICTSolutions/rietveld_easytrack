@@ -1,7 +1,7 @@
 require 'net/scp'
 
 module RietveldEasytrack
-  module SSH
+  module SCP
 
     def self.connect
       Net::SCP.start('vaku3ett.agropro.nl', 'erwin', :ssh => { :password => 'rietveld' })
