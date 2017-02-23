@@ -9,12 +9,13 @@ module RietveldEasytrack
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      path = File.join(RietveldEasytrack.root, '/tmp')
-      # Create tmp directory if not exists
-      FileUtils.mkdir_p(path) unless File.directory?(path)
-      File.open(File.join(path, '/xml.xml'), 'w') do |file|
-        file.write builder.doc.to_xml
-      end
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/task-management/test.xml')
+      # path = File.join(RietveldEasytrack.root, '/tmp')
+      # # Create tmp directory if not exists
+      # FileUtils.mkdir_p(path) unless File.directory?(path)
+      # File.open(File.join(path, '/xml.xml'), 'w') do |file|
+      #   file.write builder.doc.to_xml
+      # end
       return builder.doc.to_xml
     end
 
@@ -25,20 +26,20 @@ module RietveldEasytrack
 
     def self.test
       self.send({
-        operation_id: 'e797e01d-871e-46d7-9120-f0651fedb8a6',
+        operation_id: rand.to_s[2..40],
         asset: {
-          code: '8888'
+          code: '9999'
         },
         trip: {
-          code: '96f017e7-cd10-490f-984c-fecbcf7661aa',
+          code: rand.to_s[2..50],
           name: 'Opdracht 15/09/2015 nr 572243',
           description: 'Vertrek om 16:25 uur Vertrek klant 17:20 uur',
           sequence: 10,
-          planned_start: '2011-02-01T09:00:00',
-          planned_finish: '2011-02-01T10:00:00',
+          planned_start: '2017-02-23T12:00:00',
+          planned_finish: '2017-02-23T13:00:00',
           locations: [
             {
-              code: 'dc608c2b-46f0-4934-a5dc-3222fe9ac8de',
+              code: rand.to_s[2..50],
               name: 'OP* ECT DELTA  DDW ROTTERDAM',
               description: 'Containertype 20 box
                             Zegelnummer Ffgv
@@ -53,13 +54,9 @@ module RietveldEasytrack
                 city: 'Rotterdam',
                 country: 'NL'
               },
-              coordinates: {
-                latitude: '5',
-                longitude: '50'
-              },
               tasks: [
                 {
-                  code: '5d3968ac-8b4e-4b40-a7cc-358b70acf9f7',
+                  code: rand.to_s[2..50],
                   name: 'TR.294001',
                   description: 'Containertype 20 box
                                 Zegelnummer Ffgv
@@ -67,10 +64,10 @@ module RietveldEasytrack
                                 Afhaal referentie KKFU 771604-2
                                 Dossier 294001
                                 Adres ECT DELTA  DDW, EUROPAWEG 875, 3199 LD  ROTTERDAM, NEDERLAND',
-                  type: 49,
+                  type: 40,
                   sequence: 10,
-                  planned_start: '2011-02-01T09:00:00',
-                  planned_finish: '2011-02-01T10:00:00'
+                  planned_start: '2017-02-23T12:00:00',
+                  planned_finish: '2017-02-23T13:00:00'
                 }
               ]
             },
@@ -107,10 +104,10 @@ module RietveldEasytrack
           city: 'string',
           country: 'string'
         },
-        coordinates: {
-          longitude: 'string',
-          latitude: 'string'
-        },
+        # coordinates: {
+        #   longitude: 'string',
+        #   latitude: 'string'
+        # },
         tasks: 'array'
       }
 

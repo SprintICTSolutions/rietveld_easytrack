@@ -4,6 +4,7 @@ PATH
     rietveld_easytrack (0.1.0)
       hash_validator
       net-scp
+      net-ssh
       nokogiri
 
 GEM

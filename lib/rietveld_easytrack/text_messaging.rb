@@ -1,26 +1,58 @@
 module RietveldEasytrack
   module TextMessaging
 
-    def self.send param
+    def self.send_message(param)
       params = text_messaging_params(param)
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/text_messaging.rb'))
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      # File.open(File.join(RietveldEasytrack.root, '/tmp/xml.xml'), 'w') do |file|
-      #   file.write builder.doc.to_xml
-      # end
-      RietveldEasytrack::SCP.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/text-messaging/test.xml')
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/text-messaging/test.xml')
       return builder.doc.to_xml
     end
 
-    def self.parse param
-      return param
+    def self.read_messages(from_date = nil)
+      messages = []
+      RietveldEasytrack::Connection.dir_list('/home/erwin/easytrack/integration/from-device/text-messaging', from_date).each do |filename|
+        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
+        xml = xml.remove_namespaces!.root
+        xml.xpath('//operation').each do |operation|
+          messages << parse(operation)
+        end
+      end
+      messages
+    end
+
+    def self.parse(xml)
+      parsed_file = {}
+      # xml = Nokogiri::XML(file).remove_namespaces!.root
+      parsed_file[:asset_code] = xml.at_xpath('//asset/code').content
+      parsed_file[:operationId] = xml.at_xpath('//operationId').content
+
+      # State update message
+      message_state = xml.at_xpath('//messageState')
+      unless message_state.nil?
+        parsed_file[:message_state] = {}
+        parsed_file[:message_state][:code] = message_state.at_xpath('//code').content
+        parsed_file[:message_state][:state] = message_state.at_xpath('//state').content
+        parsed_file[:message_state][:timestamp] = message_state.at_xpath('//timestamp').content
+      end
+
+      # Reply message
+      message = xml.at_xpath('//send')
+      unless message.nil?
+        parsed_file[:message] = {}
+        parsed_file[:message][:code] = message.at_xpath('//code').content
+        parsed_file[:message][:content] = message.at_xpath('//content').content
+        parsed_file[:message][:timestamp] = message.at_xpath('//timestamp').content
+        parsed_file[:message][:reply_to] = message.at_xpath('//replyTo/code').content
+      end
+      return parsed_file
     end
 
 
     def self.test(message)
-      self.send({
+      self.send_message({
         operation_id: '1111',
         asset: {
           code: '9999'

@@ -2,7 +2,7 @@ require "rietveld_easytrack/version"
 require "nokogiri"
 require "hash_validator"
 
-require "rietveld_easytrack/scp.rb"
+require "rietveld_easytrack/connection.rb"
 require "rietveld_easytrack/task_management"
 require "rietveld_easytrack/text_messaging"
 
