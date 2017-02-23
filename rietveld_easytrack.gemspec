@@ -6,8 +6,8 @@ require 'rietveld_easytrack/version'
 Gem::Specification.new do |spec|
   spec.name          = "rietveld_easytrack"
   spec.version       = RietveldEasytrack::VERSION
-  spec.authors       = ["Snowy Leopard"]
-  spec.email         = ["rick@sprintict.nl"]
+  spec.authors       = ["Rick Lucassen", "Mark Lucassen"]
+  spec.email         = ["support@agropro.nl"]
 
   spec.summary       = %q{Gem for communication with the Rietveld Easytrack software.}
   spec.homepage      = "http://agropro.nl"
