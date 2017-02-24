@@ -53,7 +53,7 @@ module RietveldEasytrack
 
     def self.test(message)
       self.send_message({
-        operation_id: '1111',
+        operation_id: rand.to_s[2..11],
         asset: {
           code: '9999'
         },
