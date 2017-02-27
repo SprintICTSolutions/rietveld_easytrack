@@ -3,7 +3,7 @@ require 'fileutils'
 module RietveldEasytrack
   module TaskManagement
 
-    def self.send param
+    def self.send_task(param)
       params = task_management_params(param)
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       builder = Nokogiri::XML::Builder.new do |xml|
