@@ -102,3 +102,29 @@ bundle config local.rietveld_easytrack /local/path
 ```
 
 Bundler then uses your local git to determine the version, so any new changes to the gem need to be added to a (local) commit.
+
+## local_config.rb
+To help set the configuration during development, create the following file: 'lib/local_config.rb'
+
+```ruby
+module DevSettings
+  def self.set
+    RietveldEasytrack.configuration.hostname_primary = ''
+    RietveldEasytrack.configuration.username_primary = ''
+    RietveldEasytrack.configuration.password_primary = ''
+    RietveldEasytrack.configuration.port_primary = ''
+
+    RietveldEasytrack.configuration.hostname_secondary = ''
+    RietveldEasytrack.configuration.username_secondary = ''
+    RietveldEasytrack.configuration.password_secondary = ''
+    RietveldEasytrack.configuration.port_secondary = ''
+
+    RietveldEasytrack.configuration.text_message_write_path = ''
+    RietveldEasytrack.configuration.text_message_read_path = ''
+    RietveldEasytrack.configuration.task_management_write_path = ''
+    RietveldEasytrack.configuration.task_management_read_path = ''
+  end
+end
+```
+
+after this the config can be set within your console: DevSettings.set

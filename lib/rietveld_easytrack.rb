@@ -7,6 +7,8 @@ require "rietveld_easytrack/connection"
 require "rietveld_easytrack/task_management"
 require "rietveld_easytrack/text_messaging"
 
+require "local_config" if File.file?('lib/local_config.rb')
+
 module RietveldEasytrack
   class << self
     attr_accessor :configuration

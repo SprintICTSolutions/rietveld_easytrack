@@ -17,6 +17,7 @@
 /config/local_env*.yml
 /config/swagger.yml
 /config/smtp.yml
+/lib/local_config.rb
 
 # Ignore Byebug command history file.
 .byebug_history
