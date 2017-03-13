@@ -19,8 +19,55 @@ module RietveldEasytrack
       return builder.doc.to_xml
     end
 
-    def self.parse param
-      return param
+    def self.read_tasks(from_date = nil)
+      tasks = []
+      RietveldEasytrack::Connection.dir_list('/home/erwin/easytrack/integration/from-device/task-management', from_date).each do |filename|
+        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
+        xml = xml.remove_namespaces!.root
+        xml.xpath('//operation').each do |operation|
+          tasks << parse(operation)
+        end
+      end
+      tasks
+    end
+
+    def self.parse(xml)
+      parsed_file = {}
+
+      parsed_file[:operationId] = xml.at_xpath('//operationId').content
+      parsed_file[:asset_code] = xml.at_xpath('//asset/code').content
+      if xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
+        parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
+      end
+
+      # Trip states
+      parsed_file[:trips] = []
+      xml.xpath('//trips/statesTrip').each do |t|
+        trip = {}
+        trip[:trip_code] = t.at_xpath('.//code').content if t.at_xpath('.//code')
+        trip[:location_code] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
+        trip[:task_code] = t.at_xpath('.//statesTask/code').content if t.at_xpath('.//statesTask/code')
+
+        trip[:states] = []
+        t.xpath('.//states/state').each do |s|
+          state = {}
+          state[:state] = s.at_xpath('.//stateValue').content if s.at_xpath('.//stateValue')
+          state[:timestamp] = s.at_xpath('.//timestamp').content if s.at_xpath('.//timestamp')
+          state[:position] = {}
+          address = s.at_xpath('.//position/address')
+          state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
+          state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
+          state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
+          state[:position][:city] = address.at_xpath('.//city').content if address.at_xpath('.//city')
+          state[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
+          state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
+          state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
+          trip[:states] << state
+        end
+
+        parsed_file[:trips] << trip
+      end
+      return parsed_file
     end
 
 
