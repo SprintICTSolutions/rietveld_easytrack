@@ -9,19 +9,13 @@ module RietveldEasytrack
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/task-management/test.xml')
-      # path = File.join(RietveldEasytrack.root, '/tmp')
-      # # Create tmp directory if not exists
-      # FileUtils.mkdir_p(path) unless File.directory?(path)
-      # File.open(File.join(path, '/xml.xml'), 'w') do |file|
-      #   file.write builder.doc.to_xml
-      # end
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + 'test.xml')
       return builder.doc.to_xml
     end
 
     def self.read_tasks(from_date = nil)
       tasks = []
-      RietveldEasytrack::Connection.dir_list('/home/erwin/easytrack/integration/from-device/task-management', from_date).each do |filename|
+      RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_read_path, from_date).each do |filename|
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
