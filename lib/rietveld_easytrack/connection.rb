@@ -20,11 +20,11 @@ module RietveldEasytrack
       rescue Net::SSH::AuthenticationFailed
         return 'Authentication failed'
       rescue Net::SSH::ConnectionTimeout
-        return 'Connection timeout' if secondary
+        raise 'Connection timeout' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         return self.send_file(file, remote_path, true)
       rescue Exception => e
         STDERR.puts e
-        return 'Something went wrong' if secondary
+        raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         STDERR.puts 'Something went wrong, trying secondary server'
         return self.send_file(file, remote_path, true)
       end
@@ -34,13 +34,13 @@ module RietveldEasytrack
       begin
         file = open("scp://#{self.config(secondary)[:username]}@#{self.config(secondary)[:hostname]}#{path}", :ssh => { :password => self.config(secondary)[:password], :port => self.config(secondary)[:port] }).read
       rescue Net::SSH::AuthenticationFailed
-        return 'Authentication failed'
+        raise 'Authentication failed'
       rescue Net::SSH::ConnectionTimeout
-        return 'Connection timeout' if secondary
+        raise 'Connection timeout' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         return self.read_file(path, true)
       rescue Exception => e
         STDERR.puts e
-        return 'Something went wrong' if secondary
+        raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         STDERR.puts 'Something went wrong, trying secondary server'
         return self.read_file(path, true)
       end
@@ -58,11 +58,11 @@ module RietveldEasytrack
       rescue Net::SSH::AuthenticationFailed
         return 'Authentication failed'
       rescue Net::SSH::ConnectionTimeout
-        return 'Connection timeout' if secondary
+        raise 'Connection timeout' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         return self.dir_list(dir, date, true)
       rescue Exception => e
         STDERR.puts e
-        return 'Something went wrong' if secondary
+        raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         STDERR.puts 'Something went wrong, trying secondary server'
         return self.dir_list(dir, date, true)
       end
