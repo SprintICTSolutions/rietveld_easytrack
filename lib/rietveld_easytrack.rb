@@ -1,13 +1,14 @@
-require "rietveld_easytrack/configuration"
-require "rietveld_easytrack/version"
-require "nokogiri"
-require "hash_validator"
+require 'rietveld_easytrack/configuration'
+require 'rietveld_easytrack/version'
+require 'nokogiri'
+require 'hash_validator'
 
-require "rietveld_easytrack/connection"
-require "rietveld_easytrack/task_management"
-require "rietveld_easytrack/text_messaging"
+require 'rietveld_easytrack/connection'
+require 'rietveld_easytrack/task_management'
+require 'rietveld_easytrack/text_messaging'
+require 'rietveld_easytrack/activity_registration'
 
-require "local_config" if File.file?('lib/local_config.rb')
+require 'local_config' if File.file?('lib/local_config.rb')
 
 module RietveldEasytrack
   class << self

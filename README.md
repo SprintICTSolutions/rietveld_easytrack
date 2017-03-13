@@ -85,6 +85,8 @@ RietveldEasytrack.configure do |config|
 
   config.task_management_write_path = ''
   config.task_management_read_path = ''
+
+  config.activity_registration_read_path = ''
 end
 ```
 
@@ -123,6 +125,7 @@ module DevSettings
     RietveldEasytrack.configuration.text_message_read_path = ''
     RietveldEasytrack.configuration.task_management_write_path = ''
     RietveldEasytrack.configuration.task_management_read_path = ''
+    RietveldEasytrack.configuration.activity_registration_read_path = ''
   end
 end
 ```

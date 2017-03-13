@@ -27,7 +27,7 @@ module RietveldEasytrack
       parsed_file = {}
       # xml = Nokogiri::XML(file).remove_namespaces!.root
       parsed_file[:asset_code] = xml.at_xpath('//asset/code').content
-      parsed_file[:operationId] = xml.at_xpath('//operationId').content
+      parsed_file[:operation_id] = xml.at_xpath('//operationId').content
 
       # State update message
       message_state = xml.at_xpath('//messageState')
