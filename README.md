@@ -44,7 +44,7 @@ Parameter format:
            country: ''
          },
          contact: { # Optional
-           organisation: '',
+           organisation: '', # Optional
            name: '',
            phone_number: ''
          },
