@@ -3,13 +3,13 @@ require 'fileutils'
 module RietveldEasytrack
   module TaskManagement
 
-    def self.send_task(param)
-      params = task_management_params(param)
+    def self.send_task(params)
+      params = task_management_params(params)
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + 'test.xml')
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + "#{params[:operation_id]}.xml")
       return builder.doc.to_xml
     end
 
@@ -23,6 +23,27 @@ module RietveldEasytrack
         end
       end
       tasks
+    end
+
+    def self.delete_task(params)
+      params = task_management_delete_params(params)
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+          'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
+          'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
+          xml.operationId params[:operation_id]
+          xml.asset {
+            xml.code params[:asset][:code]
+          }
+          xml.delete {
+            xml.trip {
+              xml.code params[:trip][:code]
+            }
+          }
+        }
+      end
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + 'test.xml')
+      return builder.doc.to_xml
     end
 
     def self.parse(xml)
@@ -66,7 +87,7 @@ module RietveldEasytrack
 
 
     def self.test
-      self.send({
+      self.send_task({
         operation_id: rand.to_s[2..40],
         asset: {
           code: '9999'
@@ -95,6 +116,11 @@ module RietveldEasytrack
                 city: 'Rotterdam',
                 country: 'NL'
               },
+              contact: {
+                organisation: 'AgroPro',
+                name: 'John Doe',
+                phoneNumber: '0123456789'
+              },
               tasks: [
                 {
                   code: rand.to_s[2..50],
@@ -113,6 +139,18 @@ module RietveldEasytrack
               ]
             },
           ]
+        }
+      })
+    end
+
+    def self.test_delete(trip_code)
+      self.delete_task({
+        operation_id: rand.to_s[2..40],
+        asset: {
+          code: '9999'
+        },
+        trip: {
+          code: trip_code.to_s,
         }
       })
     end
@@ -139,12 +177,12 @@ module RietveldEasytrack
         name: 'string',
         description: 'string',
         sequence: 'integer',
-        address: {
-          street: 'string',
-          zipcode: 'string',
-          city: 'string',
-          country: 'string'
-        },
+        # address: {
+        #   street: 'string',
+        #   zipcode: 'string',
+        #   city: 'string',
+        #   country: 'string'
+        # },
         # coordinates: {
         #   longitude: 'string',
         #   latitude: 'string'
@@ -180,6 +218,25 @@ module RietveldEasytrack
         raise ArgumentError, {:locations => validate_location.errors}
       end
 
+
+      params
+    end
+
+    def self.task_management_delete_params(params)
+      validations = {
+        operation_id: 'string',
+        asset: {
+          code: 'string'
+        },
+        trip: {
+          code: 'string',
+        }
+      }
+
+      # Validate root
+      validate = HashValidator.validate(params, validations)
+
+      raise ArgumentError, validate.errors unless validate.valid?
 
       params
     end

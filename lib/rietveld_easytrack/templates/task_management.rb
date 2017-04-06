@@ -1,6 +1,6 @@
 xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-			  'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
-			  'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
+  'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
+  'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
   xml.operationId params[:operation_id]
   xml.asset {
     xml.code params[:asset][:code]
@@ -37,6 +37,15 @@ xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                   }
                 end
               }
+              if location[:contact]
+                xml.contacts {
+                  xml.contact {
+                    xml.organisation location[:contact][:organisation]
+                    xml.name location[:contact][:name]
+                    xml.phoneNumber location[:contact][:phoneNumber]
+                  }
+                }
+              end
               xml.tasks {
                 for task in location[:tasks]
                   xml.task {
