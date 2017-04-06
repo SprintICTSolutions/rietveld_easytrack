@@ -13,8 +13,8 @@ gem 'rietveld_easytrack', :git => 'https://github.com/SprintICTSolutions/rietvel
 
 ### Module functions
 
-#### send(param)
-Generates a sendable xml file with the given parameters.
+#### send_task(params)
+Generates a sendable xml file with the given parameters and sends it to the XML Hub.
 
 Parameter format:
 
@@ -24,26 +24,31 @@ Parameter format:
   asset: {
     code: ''
   },
-  trip: { 
+  trip: {
     code: '',
     name: '',
     description: '',
     sequence: '',
     planned_start: '', # Optional
     planned_finish: '', # Optional
-    locations: [ 
+    locations: [
       {
          code: '',
          name: '',
          description: '',
          sequence: '',
-         address: {
+         address: { # Optional
            street: '',
            zipcode: '',
            city: '',
            country: ''
          },
-         coordinates: {
+         contact: { # Optional
+           organisation: '',
+           name: '',
+           phoneNumber: ''
+         },
+         coordinates: { # Optional
            latitude: '',
            longitude: ''
          },
@@ -57,11 +62,31 @@ Parameter format:
              planned_start: '', # Optional
              planned_finish: '' # Optional
            },
-         ]   
-      },  
-   ] 
+         ]
+      },
+   ]
 }
+```
 
+#### read_tasks(from_date)
+Reads the available XML files starting from the from_date timestamp, returning the results in an array of hashes with the information.
+
+
+#### delete_task(params)
+Deletes the trip/task with the given trip code.
+
+Parameter format:
+
+```ruby
+{
+  operation_id: '',
+  asset: {
+    code: ''
+  },
+  trip: {
+    code: '',
+  }
+}
 ```
 
 # Configuration

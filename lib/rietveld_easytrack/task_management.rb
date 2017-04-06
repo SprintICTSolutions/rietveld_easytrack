@@ -97,8 +97,8 @@ module RietveldEasytrack
           name: 'Opdracht 15/09/2015 nr 572243',
           description: 'Vertrek om 16:25 uur Vertrek klant 17:20 uur',
           sequence: 10,
-          planned_start: '2017-02-23T12:00:00',
-          planned_finish: '2017-02-23T13:00:00',
+          # planned_start: '2017-02-23T12:00:00',
+          # planned_finish: '2017-02-23T13:00:00',
           locations: [
             {
               code: rand.to_s[2..50],
@@ -132,9 +132,9 @@ module RietveldEasytrack
                                 Dossier 294001
                                 Adres ECT DELTA  DDW, EUROPAWEG 875, 3199 LD  ROTTERDAM, NEDERLAND',
                   type: 40,
-                  sequence: 10,
-                  planned_start: '2017-02-23T12:00:00',
-                  planned_finish: '2017-02-23T13:00:00'
+                  sequence: 10
+                  # planned_start: '2017-02-23T12:00:00',
+                  # planned_finish: '2017-02-23T13:00:00'
                 }
               ]
             },
@@ -166,8 +166,8 @@ module RietveldEasytrack
           name: 'string',
           description: 'string',
           sequence: 'integer',
-          planned_start: 'string',
-          planned_finish: 'string',
+          # planned_start: 'string',
+          # planned_finish: 'string',
           locations: 'array'
         }
       }
@@ -196,8 +196,8 @@ module RietveldEasytrack
         description: 'string',
         type: 'integer',
         sequence: 'integer',
-        planned_start: 'string',
-        planned_finish: 'string'
+        # planned_start: 'string',
+        # planned_finish: 'string'
       }
 
       # Validate root
