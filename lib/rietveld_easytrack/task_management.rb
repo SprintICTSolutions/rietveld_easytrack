@@ -119,7 +119,7 @@ module RietveldEasytrack
               contact: {
                 organisation: 'AgroPro',
                 name: 'John Doe',
-                phoneNumber: '0123456789'
+                phone_number: '0123456789'
               },
               tasks: [
                 {

@@ -46,7 +46,7 @@ Parameter format:
          contact: { # Optional
            organisation: '',
            name: '',
-           phoneNumber: ''
+           phone_number: ''
          },
          coordinates: { # Optional
            latitude: '',

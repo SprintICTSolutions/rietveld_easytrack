@@ -42,7 +42,7 @@ xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                   xml.contact {
                     xml.organisation location[:contact][:organisation]
                     xml.name location[:contact][:name]
-                    xml.phoneNumber location[:contact][:phoneNumber]
+                    xml.phoneNumber location[:contact][:phone_number]
                   }
                 }
               end
