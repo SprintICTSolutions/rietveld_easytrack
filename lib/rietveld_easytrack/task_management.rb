@@ -49,6 +49,7 @@ module RietveldEasytrack
     def self.parse(xml)
       parsed_file = {}
 
+      parsed_file[:raw_data] = xml
       parsed_file[:operation_id] = xml.at_xpath('//operationId').content
       parsed_file[:asset_code] = xml.at_xpath('//asset/code').content
       if xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
