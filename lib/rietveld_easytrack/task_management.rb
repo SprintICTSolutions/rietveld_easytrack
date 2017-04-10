@@ -50,8 +50,8 @@ module RietveldEasytrack
       parsed_file = {}
 
       parsed_file[:raw_data] = xml.to_xml
-      parsed_file[:operation_id] = xml.at_xpath('//operationId').content
-      parsed_file[:asset_code] = xml.at_xpath('//asset/code').content
+      parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
+      parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
       if xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
