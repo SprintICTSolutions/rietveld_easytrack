@@ -58,7 +58,7 @@ module RietveldEasytrack
 
       # Trip states
       parsed_file[:trips] = []
-      xml.xpath('//trips/statesTrip').each do |t|
+      xml.xpath('.//trips/statesTrip').each do |t|
         trip = {}
         trip[:trip_code] = t.at_xpath('.//code').content if t.at_xpath('.//code')
         trip[:location_code] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
