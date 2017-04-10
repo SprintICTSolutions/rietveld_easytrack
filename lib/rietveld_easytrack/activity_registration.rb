@@ -16,8 +16,9 @@ module RietveldEasytrack
     def self.parse(xml)
       parsed_file = {}
 
-      parsed_file[:operation_id] = xml.at_xpath('//operationId').content
-      parsed_file[:asset_code] = xml.at_xpath('//asset/code').content
+      parsed_file[:raw_data] = xml.to_xml
+      parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
+      parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
 
       # activity state
       as = xml.xpath('.//update/activityState')
