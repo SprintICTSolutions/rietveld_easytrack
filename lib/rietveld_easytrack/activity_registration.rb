@@ -30,6 +30,9 @@ module RietveldEasytrack
       parsed_file[:activity_type] = as.at_xpath('.//activityType').content if as.at_xpath('.//activityType')
       parsed_file[:activity_state] = as.at_xpath('.//activityState').content if as.at_xpath('.//activityState')
       parsed_file[:timestamp] = as.at_xpath('.//timestamp').content if as.at_xpath('.//timestamp')
+      parsed_file[:timestamp] = as.at_xpath('.//start').content if parsed_file[:timestamp].nil?
+      parsed_file[:start_time] = as.at_xpath('.//start').content if as.at_xpath('.//start')
+      parsed_file[:end_time] = as.at_xpath('.//end').content if as.at_xpath('.//end')
 
       # Task references
       task_reference = as.at_xpath('.//taskReference')
@@ -44,7 +47,10 @@ module RietveldEasytrack
       coordinates = as.at_xpath('.//position/coordinate')
 
       start_position = as.at_xpath('.//startPosition/address')
+      start_position = as.at_xpath('.//startPosition') if start_position.nil?
+
       end_position = as.at_xpath('.//endPosition/address')
+      end_position = as.at_xpath('.//endPosition') if end_position.nil?
 
       if start_position && end_position
         parsed_file[:start_position] = {}
@@ -81,7 +87,6 @@ module RietveldEasytrack
 
       parsed_file[:distance_travelled] = as.at_xpath('.//distanceTravelled').content if as.at_xpath('.//distanceTravelled')
       parsed_file[:kilometrage] = as.at_xpath('.//kilometrage').content if as.at_xpath('.//kilometrage')
-
 
       return parsed_file
     end
