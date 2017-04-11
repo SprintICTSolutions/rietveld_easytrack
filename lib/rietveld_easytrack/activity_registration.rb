@@ -33,10 +33,12 @@ module RietveldEasytrack
 
       # Task references
       task_reference = as.at_xpath('.//taskReference')
-      parsed_file[:task_reference] = {} if task_reference
-      parsed_file[:task_reference][:trip_id] = task_reference.at_xpath('.//tripIdentifier').content if task_reference.at_xpath('.//tripIdentifier')
-      parsed_file[:task_reference][:location_id] = task_reference.at_xpath('.//locationIdentifier').content if task_reference.at_xpath('.//locationIdentifier')
-      parsed_file[:task_reference][:task_id] = task_reference.at_xpath('.//taskIdentifier').content if task_reference.at_xpath('.//taskIdentifier')
+      if task_reference
+        parsed_file[:task_reference] = {}
+        parsed_file[:task_reference][:trip_id] = task_reference.at_xpath('.//tripIdentifier').content if task_reference.at_xpath('.//tripIdentifier')
+        parsed_file[:task_reference][:location_id] = task_reference.at_xpath('.//locationIdentifier').content if task_reference.at_xpath('.//locationIdentifier')
+        parsed_file[:task_reference][:task_id] = task_reference.at_xpath('.//taskIdentifier').content if task_reference.at_xpath('.//taskIdentifier')
+      end
 
       address = as.at_xpath('.//position/address')
       coordinates = as.at_xpath('.//position/coordinate')
