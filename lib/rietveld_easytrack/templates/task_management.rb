@@ -25,6 +25,7 @@ xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
                 if location[:address]
                   xml.address {
                     xml.street location[:address][:street]
+                    xml.number location[:address][:number]
                     xml.zipcode location[:address][:zipcode]
                     xml.city location[:address][:city]
                     xml.country location[:address][:country]
