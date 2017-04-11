@@ -3,7 +3,9 @@ module RietveldEasytrack
 
     def self.read_activities(from_date = nil)
       tasks = []
-      RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.activity_registration_read_path, from_date).each do |filename|
+      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.activity_registration_read_path, from_date)
+      dir ||= []
+      dir.each do |filename|
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
