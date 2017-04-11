@@ -24,7 +24,7 @@ module RietveldEasytrack
 
       # activity state
       as = xml.xpath('.//update/activityState') if xml.xpath('.//update/activityState')
-      as = xml.xpath('.//update/activity') if xml.xpath('.//update/activity')
+      as = xml.xpath('.//update/activity') if as.empty?
 
       parsed_file[:activity_code] = as.at_xpath('.//code').content if as.at_xpath('.//code')
       parsed_file[:activity_type] = as.at_xpath('.//activityType').content if as.at_xpath('.//activityType')
