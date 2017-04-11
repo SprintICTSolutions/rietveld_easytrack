@@ -62,9 +62,9 @@ module RietveldEasytrack
       parsed_file[:trips] = []
       xml.xpath('.//trips/statesTrip').each do |t|
         trip = {}
-        trip[:trip_code] = t.at_xpath('.//code').content if t.at_xpath('.//code')
-        trip[:location_code] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
-        trip[:task_code] = t.at_xpath('.//statesTask/code').content if t.at_xpath('.//statesTask/code')
+        trip[:trip_id] = t.at_xpath('.//code').content if t.at_xpath('.//code')
+        trip[:location_id] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
+        trip[:task_id] = t.at_xpath('.//statesTask/code').content if t.at_xpath('.//statesTask/code')
 
         trip[:states] = []
         t.xpath('.//states/state').each do |s|
