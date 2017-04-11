@@ -31,6 +31,13 @@ module RietveldEasytrack
       parsed_file[:activity_state] = as.at_xpath('.//activityState').content if as.at_xpath('.//activityState')
       parsed_file[:timestamp] = as.at_xpath('.//timestamp').content if as.at_xpath('.//timestamp')
 
+      # Task references
+      task_reference = as.at_xpath('.//taskReference')
+      parsed_file[:task_reference] = {} if task_reference
+      parsed_file[:task_reference][:trip_id] = task_reference.at_xpath('.//tripIdentifier').content if task_reference.at_xpath('.//tripIdentifier')
+      parsed_file[:task_reference][:location_id] = task_reference.at_xpath('.//locationIdentifier').content if task_reference.at_xpath('.//locationIdentifier')
+      parsed_file[:task_reference][:task_id] = task_reference.at_xpath('.//taskIdentifier').content if task_reference.at_xpath('.//taskIdentifier')
+
       address = as.at_xpath('.//position/address')
       coordinates = as.at_xpath('.//position/coordinate')
 
@@ -38,6 +45,7 @@ module RietveldEasytrack
       end_position = as.at_xpath('.//endPosition/address')
 
       if start_position && end_position
+        parsed_file[:start_position] = {}
         parsed_file[:start_position][:street] = start_position.at_xpath('.//street').content if start_position.at_xpath('.//street')
         parsed_file[:start_position][:number] = start_position.at_xpath('.//number').content if start_position.at_xpath('.//number')
         parsed_file[:start_position][:zipcode] = start_position.at_xpath('.//zipcode').content if start_position.at_xpath('.//zipcode')
@@ -46,6 +54,7 @@ module RietveldEasytrack
         parsed_file[:start_position][:latitude] = start_position.at_xpath('.//coordinate/latitude').content if start_position.at_xpath('.//coordinate/latitude')
         parsed_file[:start_position][:longitude] = start_position.at_xpath('.//coordinate/longitude').content if start_position.at_xpath('.//coordinate/longitude')
 
+        parsed_file[:end_position] = {}
         parsed_file[:end_position][:street] = end_position.at_xpath('.//street').content if end_position.at_xpath('.//street')
         parsed_file[:end_position][:number] = end_position.at_xpath('.//number').content if end_position.at_xpath('.//number')
         parsed_file[:end_position][:zipcode] = end_position.at_xpath('.//zipcode').content if end_position.at_xpath('.//zipcode')
@@ -67,6 +76,10 @@ module RietveldEasytrack
         parsed_file[:position][:latitude] = coordinates.at_xpath('.//latitude').content if coordinates.at_xpath('.//latitude')
         parsed_file[:position][:longitude] = coordinates.at_xpath('.//longitude').content if coordinates.at_xpath('.//longitude')
       end
+
+      parsed_file[:distance_travelled] = as.at_xpath('.//distanceTravelled').content if as.at_xpath('.//distanceTravelled')
+      parsed_file[:kilometrage] = as.at_xpath('.//kilometrage').content if as.at_xpath('.//kilometrage')
+
 
       return parsed_file
     end
