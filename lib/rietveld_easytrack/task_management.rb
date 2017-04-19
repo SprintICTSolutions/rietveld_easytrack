@@ -23,6 +23,9 @@ module RietveldEasytrack
         xml.xpath('//operation').each do |operation|
           tasks << parse(operation)
         end
+        xml.xpath('//operationResult').each do |operation|
+          tasks << parse(operation)
+        end
       end
       tasks
     end
@@ -54,7 +57,7 @@ module RietveldEasytrack
       parsed_file[:raw_data] = xml.to_xml
       parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
       parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
-      if xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
+      if xml.at_xpath('//asset/children') && xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
 
