@@ -61,32 +61,37 @@ module RietveldEasytrack
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
 
-      # Trip states
-      parsed_file[:trips] = []
-      xml.xpath('.//trips/statesTrip').each do |t|
-        trip = {}
-        trip[:trip_id] = t.at_xpath('.//code').content if t.at_xpath('.//code')
-        trip[:location_id] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
-        trip[:task_id] = t.at_xpath('.//statesTask/code').content if t.at_xpath('.//statesTask/code')
+      if xml.xpath('.//trips/statesTrip').any?
+        # Trip states
+        parsed_file[:trips] = []
+        xml.xpath('.//trips/statesTrip').each do |t|
+          trip = {}
+          trip[:trip_id] = t.at_xpath('.//code').content if t.at_xpath('.//code')
+          trip[:location_id] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
+          trip[:task_id] = t.at_xpath('.//statesTask/code').content if t.at_xpath('.//statesTask/code')
 
-        trip[:states] = []
-        t.xpath('.//states/state').each do |s|
-          state = {}
-          state[:state] = s.at_xpath('.//stateValue').content if s.at_xpath('.//stateValue')
-          state[:timestamp] = s.at_xpath('.//timestamp').content if s.at_xpath('.//timestamp')
-          state[:position] = {}
-          address = s.at_xpath('.//position/address')
-          state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
-          state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
-          state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
-          state[:position][:city] = address.at_xpath('.//city').content if address.at_xpath('.//city')
-          state[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
-          state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
-          state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
-          trip[:states] << state
+          trip[:states] = []
+          t.xpath('.//states/state').each do |s|
+            state = {}
+            state[:state] = s.at_xpath('.//stateValue').content if s.at_xpath('.//stateValue')
+            state[:timestamp] = s.at_xpath('.//timestamp').content if s.at_xpath('.//timestamp')
+            state[:position] = {}
+            address = s.at_xpath('.//position/address')
+            state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
+            state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
+            state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
+            state[:position][:city] = address.at_xpath('.//city').content if address.at_xpath('.//city')
+            state[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
+            state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
+            state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
+            trip[:states] << state
+          end
+
+          parsed_file[:trips] << trip
         end
-
-        parsed_file[:trips] << trip
+      else
+        parsed_file[:timestamp] = xml.at_xpath('.//timestamp').content if xml.at_xpath('.//timestamp')
+        parsed_file[:result] = xml.at_xpath('.//result').content if xml.at_xpath('.//result')
       end
       return parsed_file
     end
