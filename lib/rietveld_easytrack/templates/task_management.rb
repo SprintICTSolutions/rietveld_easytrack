@@ -21,6 +21,12 @@ xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/201
               xml.description location[:description]
               xml.sequence location[:sequence]
               xml.position {
+                if location[:coordinates]
+                  xml.coordinate {
+                    xml.latitude location[:coordinates][:latitude]
+                    xml.longitude location[:coordinates][:longitude]
+                  }
+                end
                 if location[:address]
                   xml.address {
                     xml.street location[:address][:street]
@@ -30,12 +36,6 @@ xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/201
                     xml.country location[:address][:country]
                   }
                 end
-                # if location[:coordinates]
-                  xml.coordinate {
-                    xml.latitude location[:coordinates][:latitude]
-                    xml.longitude location[:coordinates][:longitude]
-                  }
-                # end
               }
               if location[:contact]
                 xml.contacts {
