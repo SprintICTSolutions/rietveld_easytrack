@@ -6,7 +6,8 @@ module RietveldEasytrack
     def self.send_task(params)
       params = task_management_params(params)
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
-      builder = Nokogiri::XML::Builder.new do |xml|
+      xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
+      builder = Nokogiri::XML::Builder.with(xml) do |xml|
         eval template
       end
       RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + "#{params[:operation_id]}.xml")
