@@ -19,7 +19,7 @@ xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/201
               xml.code location[:code]
               xml.name location[:name]
               xml.description location[:description]
-              xml.sequence location[:sequence]
+              # xml.sequence location[:sequence]
               xml.position {
                 if location[:coordinates]
                   xml.coordinate {
