@@ -6,7 +6,7 @@ module RietveldEasytrack
     def self.send_task(params)
       params = task_management_params(params)
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
-      builder = Nokogiri::XML::Builder.new do |xml|
+      builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
         eval template
       end
       RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + "#{params[:operation_id]}.xml")
@@ -34,7 +34,6 @@ module RietveldEasytrack
       params = task_management_delete_params(params)
       builder = Nokogiri::XML::Builder.new do |xml|
         xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-          'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
           'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
           xml.operationId params[:operation_id]
           xml.asset {
