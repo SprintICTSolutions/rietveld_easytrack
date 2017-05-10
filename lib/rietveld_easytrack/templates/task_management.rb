@@ -1,5 +1,4 @@
 xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02',
-  'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
   'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance') {
   xml.operationId params[:operation_id]
   xml.asset {
@@ -31,12 +30,12 @@ xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/201
                     xml.country location[:address][:country]
                   }
                 end
-                if location[:coordinates]
+                # if location[:coordinates]
                   xml.coordinate {
                     xml.latitude location[:coordinates][:latitude]
                     xml.longitude location[:coordinates][:longitude]
                   }
-                end
+                # end
               }
               if location[:contact]
                 xml.contacts {
