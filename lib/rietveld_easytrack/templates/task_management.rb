@@ -1,5 +1,5 @@
-xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02',
-              'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance') {
+xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+  'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
   xml.operationId params[:operation_id]
   xml.asset {
     xml.code params[:asset][:code]
@@ -19,7 +19,7 @@ xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/201
               xml.code location[:code]
               xml.name location[:name]
               xml.description location[:description]
-              # xml.sequence location[:sequence]
+              xml.sequence location[:sequence]
               xml.position {
                 if location[:address]
                   xml.address {
