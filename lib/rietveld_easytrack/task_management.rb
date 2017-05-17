@@ -22,7 +22,7 @@ module RietveldEasytrack
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
-          tasks << parse_answers(operation)
+          tasks << parse(operation)
         end
         xml.xpath('//operationResult').each do |operation|
           tasks << parse(operation)
@@ -113,7 +113,7 @@ module RietveldEasytrack
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
 
-      if xml.xpath('.//questionnaireReport').present?
+      unless xml.xpath('.//questionnaireReport').nil?
         parsed_file[:questionnaireReport] = []
 
         report = {}
@@ -125,7 +125,6 @@ module RietveldEasytrack
         parsed_file[:questionnaireReport] << report
      end
 
-	  parsed_file[:questionnaireReport] = xml.at_xpath('.//questionnaireReport').content
       return parsed_file
     end
 
