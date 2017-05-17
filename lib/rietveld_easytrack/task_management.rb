@@ -125,7 +125,7 @@ module RietveldEasytrack
         parsed_file[:questionnaireReport] << report
      end
 
-	  parsed_file[:questionnaireReport] = xml.xpath('.//questionnaireReport').content
+	  parsed_file[:questionnaireReport] = xml.at_xpath('.//questionnaireReport').content
       return parsed_file
     end
 
