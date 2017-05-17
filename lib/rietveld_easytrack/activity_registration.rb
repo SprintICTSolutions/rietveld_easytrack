@@ -90,7 +90,6 @@ module RietveldEasytrack
 
       return parsed_file
     end
-  end
 
     def self.parse_answers(xml)
       parsed_file = {}
@@ -120,7 +119,7 @@ module RietveldEasytrack
 
     def self.read_answers(from_date = nil)
       answers = []
-      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_read_path, from_date)
+      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.activity_registration_read_path, from_date)
       dir ||= []
       dir.each do |filename|
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
@@ -134,4 +133,5 @@ module RietveldEasytrack
       end
       answers
     end
+  end
 end
