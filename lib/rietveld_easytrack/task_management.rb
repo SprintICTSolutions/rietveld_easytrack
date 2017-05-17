@@ -113,7 +113,7 @@ module RietveldEasytrack
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
 
-      if xml.xpath('.//questionnaireReport').any?
+      if xml.xpath('.//questionnaireReport').present?
         parsed_file[:questionnaireReport] = []
 
         report = {}
