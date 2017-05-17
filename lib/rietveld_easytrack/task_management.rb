@@ -97,6 +97,22 @@ module RietveldEasytrack
       return parsed_file
     end
 
+    def self.read_answers(from_date = nil)
+      tasks = []
+      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_answer_path, from_date)
+      dir ||= []
+      dir.each do |filename|
+        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
+        xml = xml.remove_namespaces!.root
+        xml.xpath('//operation').each do |operation|
+          tasks << parse(operation)
+        end
+        xml.xpath('//operationResult').each do |operation|
+          tasks << parse(operation)
+        end
+      end
+      tasks
+    end
 
     def self.test
       self.send_task({
