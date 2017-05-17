@@ -33,6 +33,7 @@ module RietveldEasytrack
       parsed_file[:timestamp] = as.at_xpath('.//start').content if parsed_file[:timestamp].nil?
       parsed_file[:start_time] = as.at_xpath('.//start').content if as.at_xpath('.//start')
       parsed_file[:end_time] = as.at_xpath('.//end').content if as.at_xpath('.//end')
+	  parsed_file[:questionnaireReport] = as.at_xpath('.//questionnaireReport').content if as.at_xpath('.//questionnaireReport')
 
       # Task references
       task_reference = as.at_xpath('.//taskReference')
@@ -125,9 +126,6 @@ module RietveldEasytrack
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
-          answers << parse_answers(operation)
-        end
-        xml.xpath('//operationResult').each do |operation|
           answers << parse_answers(operation)
         end
       end
