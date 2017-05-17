@@ -91,4 +91,47 @@ module RietveldEasytrack
       return parsed_file
     end
   end
+
+    def self.parse_answers(xml)
+      parsed_file = {}
+
+      parsed_file[:raw_data] = xml.to_xml
+      parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
+      parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
+
+      if xml.at_xpath('//asset/children') && xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
+        parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
+      end
+
+      unless xml.xpath('.//questionnaireReport').nil?
+        parsed_file[:questionnaireReport] = []
+
+        report = {}
+        xml.xpath('.//questionnaireReport') do |q|
+            report[:questionnaireId] = q.at_xpath('.//questionnaireId').content
+
+        end
+
+        parsed_file[:questionnaireReport] << report
+     end
+
+      return parsed_file
+    end
+
+    def self.read_answers(from_date = nil)
+      answers = []
+      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_read_path, from_date)
+      dir ||= []
+      dir.each do |filename|
+        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
+        xml = xml.remove_namespaces!.root
+        xml.xpath('//operation').each do |operation|
+          answers << parse_answers(operation)
+        end
+        xml.xpath('//operationResult').each do |operation|
+          answers << parse_answers(operation)
+        end
+      end
+      answers
+    end
 end
