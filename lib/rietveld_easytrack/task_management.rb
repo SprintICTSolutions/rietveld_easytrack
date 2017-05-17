@@ -116,9 +116,9 @@ module RietveldEasytrack
       if xml.xpath('.//questionnaireReport').any?
         parsed_file[:questionnaireReport] = []
 
+        report = {}
         xml.xpath('.//questionnaireReport') do |q|
-            report = {}
-            report[:questionnaireId] = xml.at_xpath('.//questionnaireId').content
+            report[:questionnaireId] = q.at_xpath('.//questionnaireId').content
 
         end
 
