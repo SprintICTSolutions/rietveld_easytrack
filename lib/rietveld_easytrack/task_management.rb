@@ -22,7 +22,7 @@ module RietveldEasytrack
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
-          tasks << parse(operation)
+          tasks << parse_answers(operation)
         end
         xml.xpath('//operationResult').each do |operation|
           tasks << parse(operation)
