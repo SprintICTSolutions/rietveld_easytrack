@@ -124,6 +124,8 @@ module RietveldEasytrack
 
         parsed_file[:questionnaireReport] << report
      end
+
+      return parsed_file
     end
 
     def self.read_answers(from_date = nil)
