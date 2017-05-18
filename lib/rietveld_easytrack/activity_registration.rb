@@ -34,19 +34,19 @@ module RietveldEasytrack
       parsed_file[:start_time] = as.at_xpath('.//start').content if as.at_xpath('.//start')
       parsed_file[:end_time] = as.at_xpath('.//end').content if as.at_xpath('.//end')
 
-	  q = as.xpath('.//questionnaireReport') if as.xpath('.//questionnaireReport')
+      q = xml.xpath('.//questionnaireReport') if xml.xpath('.//questionnaireReport')
 
-	  questionnare = []
+      questionnare = {}
 
-	  questionnare[:questionnaireId] = q.at_xpath('.//questionnaireId').content if q.at_xpath('.//questionnaireId')
-	  questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
-	  questionnare[:timestamp] = q.at_xpath('.//timestamp').content if q.at_xpath('.//timestamp')
-	  questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+      questionnare[:questionnaireId] = q.at_xpath('.//questionnaireId').content if q.at_xpath('.//questionnaireId')
+      questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+      questionnare[:timestamp] = q.at_xpath('.//timestamp').content if q.at_xpath('.//timestamp')
+      questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
 
-	  # TODO loop door answer blocks...
-	  # questionnare[:answer] = q.at_xpath('.//answer').content if as.at_xpath('.//answer')
+      # TODO loop door answer blocks...
+      # questionnare[:answer] = q.at_xpath('.//answer').content if as.at_xpath('.//answer')
 
-	  parsed_file[:questionnaireReport] = questionnare
+      parsed_file[:questionnaireReport] = questionnare
 
       # Task references
       task_reference = as.at_xpath('.//taskReference')
