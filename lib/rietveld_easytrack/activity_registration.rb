@@ -38,10 +38,10 @@ module RietveldEasytrack
 
 	  questionnare = []
 
-	  questionnare[:questionnaireId] = q.at_xpath('.//questionnaireId').content if as.at_xpath('.//questionnaireId')
-	  questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if as.at_xpath('.//questionnaireVersion')
-	  questionnare[:timestamp] = q.at_xpath('.//timestamp').content if as.at_xpath('.//timestamp')
-	  questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if as.at_xpath('.//questionnaireVersion')
+	  questionnare[:questionnaireId] = q.at_xpath('.//questionnaireId').content if q.at_xpath('.//questionnaireId')
+	  questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+	  questionnare[:timestamp] = q.at_xpath('.//timestamp').content if q.at_xpath('.//timestamp')
+	  questionnare[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
 
 	  # TODO loop door answer blocks...
 	  # questionnare[:answer] = q.at_xpath('.//answer').content if as.at_xpath('.//answer')
@@ -103,46 +103,6 @@ module RietveldEasytrack
       parsed_file[:kilometrage] = as.at_xpath('.//kilometrage').content if as.at_xpath('.//kilometrage')
 
       return parsed_file
-    end
-
-    def self.parse_answers(xml)
-      parsed_file = {}
-
-      parsed_file[:raw_data] = xml.to_xml
-      parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
-      parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
-
-      if xml.at_xpath('//asset/children') && xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
-        parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
-      end
-
-      unless xml.xpath('.//questionnaireReport').nil?
-        parsed_file[:questionnaireReport] = []
-
-        report = {}
-        xml.xpath('.//questionnaireReport') do |q|
-            report[:questionnaireId] = q.at_xpath('.//questionnaireId').content
-
-        end
-
-        parsed_file[:questionnaireReport] << report
-     end
-
-      return parsed_file
-    end
-
-    def self.read_answers(from_date = nil)
-      answers = []
-      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.activity_registration_read_path, from_date)
-      dir ||= []
-      dir.each do |filename|
-        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
-        xml = xml.remove_namespaces!.root
-        xml.xpath('//operation').each do |operation|
-          answers << parse_answers(operation)
-        end
-      end
-      answers
     end
   end
 end
