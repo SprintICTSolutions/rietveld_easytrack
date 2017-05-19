@@ -34,7 +34,8 @@ module RietveldEasytrack
       parsed_file[:start_time] = as.at_xpath('.//start').content if as.at_xpath('.//start')
       parsed_file[:end_time] = as.at_xpath('.//end').content if as.at_xpath('.//end')
 
-      q = xml.xpath('.//questionnaireReport') if xml.xpath('.//questionnaireReport')
+      if xml.xpath('.//questionnaireReport')
+      q = xml.xpath('.//questionnaireReport')
 
       questionnaire = {}
 
@@ -55,7 +56,7 @@ module RietveldEasytrack
 	  end
 
       parsed_file[:questionnaireReport] = questionnaire
-
+	  end
       # Task references
       task_reference = as.at_xpath('.//taskReference')
       if task_reference
