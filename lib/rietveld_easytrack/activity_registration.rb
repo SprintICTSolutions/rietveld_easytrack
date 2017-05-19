@@ -34,7 +34,7 @@ module RietveldEasytrack
       parsed_file[:start_time] = as.at_xpath('.//start').content if as.at_xpath('.//start')
       parsed_file[:end_time] = as.at_xpath('.//end').content if as.at_xpath('.//end')
 
-      if xml.xpath('.//questionnaireReport')
+      if as.xpath('.//questionnaireReport')
         q = xml.xpath('.//questionnaireReport')
 
         questionnaire = {}
