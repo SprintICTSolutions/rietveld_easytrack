@@ -3,14 +3,26 @@ require 'fileutils'
 module RietveldEasytrack
   module TaskManagement
 
-    def self.send_task(params)
-      params = task_management_params(params)
+    def self.send_task(tasks)
+      # Make sure tasks is an array
+      tasks = Array(tasks)
+
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
-      builder = Nokogiri::XML::Builder.with(xml) do |xml|
-        eval template
+
+      xml_tasks = ''
+
+      tasks.each do |params|
+        params = task_management_params(params)
+        builder = Nokogiri::XML::Builder.with(xml) do |xml|
+          eval template
+        end
+        xml_tasks << builder.doc.to_xml
       end
-      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path + "#{params[:operation_id]}.xml")
+
+      xml_tasks = "<operationBatch>#{xml_tasks}</operationBatch>" if tasks.length > 1
+
+      RietveldEasytrack::Connection.send_file(xml_tasks, RietveldEasytrack.configuration.task_management_write_path + "tasks_#{Time.now.iso8601.to_s}.xml")
       return builder.doc.to_xml
     end
 
