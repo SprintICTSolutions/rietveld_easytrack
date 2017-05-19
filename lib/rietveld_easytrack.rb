@@ -97,7 +97,12 @@ module RietveldEasytrack
       97 => 'spanbanden',
       98 => 'papieren',
       99 => 'diversen',
-      200 => 'onkosten'
+      200 => 'onkosten',
+      221 => 'overpompen',
+      256 => 'laden gmp (VIA TAAK)',
+      257 => 'lossen gmp (VIA TAAK)',
+      258 => 'laden mest (VIA TAAK)',
+      259 => 'lossen mest (VIA TAAK)'
     }
   end
 end

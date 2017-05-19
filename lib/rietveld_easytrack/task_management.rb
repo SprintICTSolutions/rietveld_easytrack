@@ -109,10 +109,6 @@ module RietveldEasytrack
         parsed_file[:result] = xml.at_xpath('.//result').content if xml.at_xpath('.//result')
       end
 
-
-
-
-
       return parsed_file
     end
 

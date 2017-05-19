@@ -34,29 +34,30 @@ module RietveldEasytrack
       parsed_file[:start_time] = as.at_xpath('.//start').content if as.at_xpath('.//start')
       parsed_file[:end_time] = as.at_xpath('.//end').content if as.at_xpath('.//end')
 
-      if xml.xpath('.//questionnaireReport')
-      q = xml.xpath('.//questionnaireReport')
+      if as.xpath('.//questionnaireReport')
+        q = xml.xpath('.//questionnaireReport')
 
-      questionnaire = {}
+        questionnaire = {}
 
-      questionnaire[:questionnaireId] = q.at_xpath('.//questionnaireId').content if q.at_xpath('.//questionnaireId')
-      questionnaire[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
-      questionnaire[:timestamp] = q.at_xpath('.//timestamp').content if q.at_xpath('.//timestamp')
-      questionnaire[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+        questionnaire[:questionnaireId] = q.at_xpath('.//questionnaireId').content if q.at_xpath('.//questionnaireId')
+        questionnaire[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+        questionnaire[:timestamp] = q.at_xpath('.//timestamp').content if q.at_xpath('.//timestamp')
+        questionnaire[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
 
-      # TODO loop door answer blocks...
-      # questionnaire[:answer] = q.at_xpath('.//answer').content if as.at_xpath('.//answer')
-	  q.xpath('.//answer').each do |a|
-         answer = {}
-         
-		 answer[:questionId] = a.at_xpath('.//questionId').content
-		 answer[:answerValue] = a.at_xpath('.//answerValue').content
+        questionnaire[:answers] = []
 
-         questionnaire[:answers] << answer
-	  end
+        q.xpath('.//answer').each do |a|
+          answer = {}
 
-      parsed_file[:questionnaireReport] = questionnaire
-	  end
+          answer[:questionId] = a.at_xpath('.//questionId').content if a.at_xpath('.//questionId')
+          answer[:answerValue] = a.at_xpath('.//answerValue').content if a.at_xpath('.//answerValue')
+
+          questionnaire[:answers] << answer
+        end
+
+        parsed_file[:questionnaireReport] = questionnaire
+      end
+
       # Task references
       task_reference = as.at_xpath('.//taskReference')
       if task_reference
