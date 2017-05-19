@@ -8,6 +8,7 @@ module RietveldEasytrack
       tasks = Array(tasks)
 
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
+      xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
 
       xml_tasks = ''
 
