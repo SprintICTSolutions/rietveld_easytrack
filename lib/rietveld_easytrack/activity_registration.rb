@@ -49,8 +49,8 @@ module RietveldEasytrack
         q.xpath('.//answer').each do |a|
           answer = {}
 
-          answer[:questionId] = a.at_xpath('.//questionId').content
-          answer[:answerValue] = a.at_xpath('.//answerValue').content
+          answer[:questionId] = a.at_xpath('.//questionId').content if a.at_xpath('.//questionId')
+          answer[:answerValue] = a.at_xpath('.//answerValue').content if a.at_xpath('.//answerValue')
 
           questionnaire[:answers] << answer
         end
