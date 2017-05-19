@@ -8,22 +8,23 @@ module RietveldEasytrack
       tasks = Array(tasks)
 
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
-      xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
 
       xml_tasks = ''
 
       tasks.each do |params|
         params = task_management_params(params)
-        builder = Nokogiri::XML::Builder.with(xml) do |xml|
+        builder = Nokogiri::XML::Builder.new do |xml|
           eval template
         end
-        xml_tasks << builder.doc.to_xml
+        xml_tasks << builder.doc.root.to_xml
       end
 
-      xml_tasks = "<operationBatch>#{xml_tasks}</operationBatch>" if tasks.length > 1
+      xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if tasks.length > 1
 
-      RietveldEasytrack::Connection.send_file(xml_tasks, RietveldEasytrack.configuration.task_management_write_path + "tasks_#{Time.now.iso8601.to_s}.xml")
-      return builder.doc.to_xml
+      xml << xml_tasks
+
+      RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path + "tasks_#{Time.now.iso8601.to_s}.xml")
+      return xml.to_xml
     end
 
     def self.read_tasks(from_date = nil)
