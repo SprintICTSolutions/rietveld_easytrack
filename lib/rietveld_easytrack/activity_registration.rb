@@ -57,6 +57,7 @@ module RietveldEasytrack
 
         parsed_file[:questionnaireReport] = questionnaire
       end
+
       # Task references
       task_reference = as.at_xpath('.//taskReference')
       if task_reference
