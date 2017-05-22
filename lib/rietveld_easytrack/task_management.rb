@@ -72,6 +72,9 @@ module RietveldEasytrack
       parsed_file[:raw_data] = xml.to_xml
       parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
       parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
+      parsed_file[:asset_name] = xml.at_xpath('.//asset/name').content if xml.at_xpath('.//asset/name')
+      parsed_file[:asset_type] = xml.at_xpath('.//asset/type').content if xml.at_xpath('.//asset/type')
+
       if xml.at_xpath('//asset/children') && xml.at_xpath('//asset/children/child/asset/type').content == 'PERSON'
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
@@ -105,6 +108,7 @@ module RietveldEasytrack
           parsed_file[:trips] << trip
         end
       else
+        parsed_file[:kilometrage] = xml.at_xpath('.//kilometrage').content if as.at_xpath('.//kilometrage')
         parsed_file[:timestamp] = xml.at_xpath('.//timestamp').content if xml.at_xpath('.//timestamp')
         parsed_file[:result] = xml.at_xpath('.//result').content if xml.at_xpath('.//result')
       end
