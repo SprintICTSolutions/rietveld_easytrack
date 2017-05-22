@@ -50,10 +50,12 @@ module RietveldEasytrack
     def self.dir_list(dir, date = nil, secondary = nil)
       begin
         date = Time.now().to_date.to_s if date.nil?
+        all_data = ''
         Net::SSH.start(self.config(secondary)[:hostname], self.config(secondary)[:username], :password => self.config(secondary)[:password], :port => self.config(secondary)[:port]) do |ssh|
           ssh.exec!("find #{dir} -mindepth 1 -newermt #{date}") do |channel, stream, data|
-            return data.split("\n")
+            all_data << data
           end
+          return all_data.split("\n")
         end
       rescue Net::SSH::AuthenticationFailed
         return 'Authentication failed'
