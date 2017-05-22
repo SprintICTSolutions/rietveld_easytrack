@@ -108,7 +108,7 @@ module RietveldEasytrack
           parsed_file[:trips] << trip
         end
       else
-        parsed_file[:kilometrage] = xml.at_xpath('.//kilometrage').content if as.at_xpath('.//kilometrage')
+        parsed_file[:kilometrage] = xml.at_xpath('.//kilometrage').content if xml.at_xpath('.//kilometrage')
         parsed_file[:timestamp] = xml.at_xpath('.//timestamp').content if xml.at_xpath('.//timestamp')
         parsed_file[:result] = xml.at_xpath('.//result').content if xml.at_xpath('.//result')
       end
