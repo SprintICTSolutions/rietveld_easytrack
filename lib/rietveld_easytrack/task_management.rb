@@ -98,6 +98,8 @@ module RietveldEasytrack
       test = xml.xpath('.//trips/statesTrip')
       test = xml.xpath('.//trips/trip') if w
 
+      puts test.inspect
+
       if test.any?
         # Trip states
         parsed_file[:trips] = []
