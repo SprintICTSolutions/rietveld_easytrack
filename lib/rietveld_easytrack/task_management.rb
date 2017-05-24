@@ -150,12 +150,16 @@ module RietveldEasytrack
         xml.xpath('.//trips/trip').each do |t|
           trip = {}
           trip[:trip_id] = t.at_xpath('.//code').content if t.at_xpath('.//code')
-          trip[:task_id] = t.at_xpath('.//statesTask/code').content if t.at_xpath('.//statesTask/code')
+          trip[:name] = t.at_xpath('.//name').content if t.at_xpath('.//name')
+          trip[:description] = t.at_xpath('.//description').content if t.at_xpath('.//description')
+          trip[:sequence] = t.at_xpath('.//sequence').content if t.at_xpath('.//sequence')
 
           trip[:locations] = []
           t.xpath('.//locations/location').each do |l|
             location = {}
             location[:code] = l.at_xpath('.//code').content if l.at_xpath('.//code')
+            location[:name] = l.at_xpath('.//name').content if l.at_xpath('.//name')
+            location[:description] = l.at_xpath('.//description').content if l.at_xpath('.//description')
             location[:position] = {}
             address = l.at_xpath('.//position/address')
             location[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
@@ -165,6 +169,15 @@ module RietveldEasytrack
             location[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
             location[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
             location[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
+
+            location[:contacts] = []
+            l.xpath('.//contacts/contact').each do |c|
+              contact = {}
+              contact[:name] = c.at_xpath('.//name').content if c.at_xpath('.//name')
+              contact[:phoneNumber] = c.at_xpath('.//phoneNumber').content if c.at_xpath('.//phoneNumber')
+              location[:contacts] << contact
+            end
+
             trip[:locations] << location
           end
 
