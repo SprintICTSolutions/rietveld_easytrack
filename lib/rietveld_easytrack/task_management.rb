@@ -4,6 +4,7 @@ module RietveldEasytrack
   module TaskManagement
 
     def self.send_task(tasks)
+      return 'Data invalid, please check your data' if tasks.empty?
       # Make sure tasks is an array
       tasks = Array(tasks)
 
