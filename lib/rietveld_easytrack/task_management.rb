@@ -101,7 +101,7 @@ module RietveldEasytrack
       if test.any?
         # Trip states
         parsed_file[:trips] = []
-        xml.xpath('.//trips/statesTrip').each do |t|
+        test.each do |t|
           trip = {}
           trip[:trip_id] = t.at_xpath('.//code').content if t.at_xpath('.//code')
           trip[:location_id] = t.at_xpath('.//statesLocation/code').content if t.at_xpath('.//statesLocation/code')
