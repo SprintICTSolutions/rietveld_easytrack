@@ -37,10 +37,10 @@ module RietveldEasytrack
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
-          tasks << parse(operation)
+          tasks << parse(operation, false)
         end
         xml.xpath('//operationResult').each do |operation|
-          tasks << parse(operation)
+          tasks << parse(operation, false)
         end
       end
       tasks
@@ -54,10 +54,10 @@ module RietveldEasytrack
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
-          tasks << parse(operation)
+          tasks << parse(operation, true)
         end
         xml.xpath('//operationResult').each do |operation|
-          tasks << parse(operation)
+          tasks << parse(operation, true)
         end
       end
       tasks
@@ -84,7 +84,7 @@ module RietveldEasytrack
       return builder.doc.to_xml
     end
 
-    def self.parse(xml)
+    def self.parse(xml, w)
       parsed_file = {}
 
       parsed_file[:raw_data] = xml.to_xml
@@ -95,7 +95,10 @@ module RietveldEasytrack
         parsed_file[:asset_code_driver] = xml.at_xpath('//asset/children/child/asset/code').content
       end
 
-      if xml.xpath('.//trips/statesTrip').any?
+      test = xml.xpath('.//trips/statesTrip')
+      test = xml.xpath('.//trips/trip') if w
+
+      if test.any?
         # Trip states
         parsed_file[:trips] = []
         xml.xpath('.//trips/statesTrip').each do |t|
