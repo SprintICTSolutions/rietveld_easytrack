@@ -111,7 +111,7 @@ module RietveldEasytrack
         parsed_file[:result] = xml.at_xpath('.//result').content if xml.at_xpath('.//result')
       end
 
-        # parsed_file[:kilometrage] = xml.at_xpath('.//kilometrage').content if xml.at_xpath('.//kilometrage')
+        parsed_file[:kilometrage] = xml.at_xpath('.//kilometrage').content if xml.at_xpath('.//kilometrage')
       return parsed_file
     end
 
