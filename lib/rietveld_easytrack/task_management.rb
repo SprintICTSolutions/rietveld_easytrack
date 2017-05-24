@@ -48,7 +48,7 @@ module RietveldEasytrack
 
     def self.read_tasks_to_device(from_date = nil)
       tasks = []
-      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_write_path, from_date)
+      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_write_path + '/processed', from_date)
       dir ||= []
       dir.each do |filename|
         xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
