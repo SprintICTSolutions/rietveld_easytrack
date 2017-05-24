@@ -46,6 +46,23 @@ module RietveldEasytrack
       tasks
     end
 
+    def self.read_tasks_to_device(from_date = nil)
+      tasks = []
+      dir = RietveldEasytrack::Connection.dir_list(RietveldEasytrack.configuration.task_management_write_path, from_date)
+      dir ||= []
+      dir.each do |filename|
+        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
+        xml = xml.remove_namespaces!.root
+        xml.xpath('//operation').each do |operation|
+          tasks << parse(operation)
+        end
+        xml.xpath('//operationResult').each do |operation|
+          tasks << parse(operation)
+        end
+      end
+      tasks
+    end
+
     def self.delete_task(params)
       params = task_management_delete_params(params)
       builder = Nokogiri::XML::Builder.new do |xml|
