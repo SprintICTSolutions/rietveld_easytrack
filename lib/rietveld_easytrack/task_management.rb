@@ -157,7 +157,7 @@ module RietveldEasytrack
           trip[:locations] = []
           t.xpath('.//locations/location').each do |l|
             location = {}
-            location[:code] = l.at_xpath('.//code').content if l.at_xpath('.//code')
+            location[:location_id] = l.at_xpath('.//code').content if l.at_xpath('.//code')
             location[:name] = l.at_xpath('.//name').content if l.at_xpath('.//name')
             location[:description] = l.at_xpath('.//description').content if l.at_xpath('.//description')
             location[:position] = {}
