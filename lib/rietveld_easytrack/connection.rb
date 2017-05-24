@@ -30,44 +30,41 @@ module RietveldEasytrack
       end
     end
 
-    def self.read_file(path, secondary = nil)
-      begin
-        file = open("scp://#{self.config(secondary)[:username]}@#{self.config(secondary)[:hostname]}#{path}", :ssh => { :password => self.config(secondary)[:password], :port => self.config(secondary)[:port] }).read
-      rescue Net::SSH::AuthenticationFailed
-        raise 'Authentication failed'
-      rescue Net::SSH::ConnectionTimeout
-        raise 'Connection timeout' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
-        return self.read_file(path, true)
-      rescue Exception => e
-        STDERR.puts e
-        raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
-        STDERR.puts 'Something went wrong, trying secondary server'
-        return self.read_file(path, true)
-      end
-    end
-
-    # Returns array of full path file locations in the given dir
-    def self.dir_list(dir, date = nil, secondary = nil)
+    def self.read_files(path, date = nil, secondary = nil)
       begin
         date = Time.now().to_date.to_s if date.nil?
-        all_data = ''
+        files = []
         Net::SSH.start(self.config(secondary)[:hostname], self.config(secondary)[:username], :password => self.config(secondary)[:password], :port => self.config(secondary)[:port]) do |ssh|
-          ssh.exec!("find #{dir} -mindepth 1 -newermt #{date}") do |channel, stream, data|
-            all_data << data
+          file_names = self.dir_list(path, date, ssh)
+          file_names.each do |fn|
+            files << self.read_file(fn, ssh)
           end
-          return all_data.split("\n")
+          return files
         end
       rescue Net::SSH::AuthenticationFailed
         return 'Authentication failed'
       rescue Net::SSH::ConnectionTimeout
         raise 'Connection timeout' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
-        return self.dir_list(dir, date, true)
+        return self.read_files(path, date, true)
       rescue Exception => e
         STDERR.puts e
         raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         STDERR.puts 'Something went wrong, trying secondary server'
-        return self.dir_list(dir, date, true)
+        return self.read_files(path, date, true)
       end
+    end
+
+    def self.read_file(path, ssh_connection)
+      ssh_connection.scp.download!(path)
+    end
+
+    # Returns array of full path file locations in the given dir
+    def self.dir_list(dir, date = nil, ssh_connection)
+      all_data = ''
+      ssh_connection.exec!("find #{dir} -mindepth 1 -newermt #{date}") do |channel, stream, data|
+        all_data << data
+      end
+      return all_data.split("\n")
     end
 
     def self.config(secondary = nil)
