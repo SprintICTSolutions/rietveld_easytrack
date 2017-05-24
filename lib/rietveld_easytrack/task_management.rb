@@ -46,10 +46,9 @@ module RietveldEasytrack
       tasks
     end
 
-    def self.read_tasks_to_device(from_date = nil, invalid = false)
+    def self.read_tasks_to_device(from_date = nil)
       tasks = []
       sub_dir = '/processed'
-      sub_dir = '/invalid' if invalid
       dir = RietveldEasytrack::Connection.read_files(RietveldEasytrack.configuration.task_management_write_path + sub_dir, from_date)
       dir ||= []
       dir.each do |file|
@@ -58,9 +57,6 @@ module RietveldEasytrack
         xml.xpath('//operation').each do |operation|
           tasks << parse_to_device(operation)
         end
-        # xml.xpath('//operationResult').each do |operation|
-        #   tasks << parse_to_device(operation)
-        # end
       end
       tasks
     end
