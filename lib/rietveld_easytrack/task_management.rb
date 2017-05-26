@@ -117,6 +117,31 @@ module RietveldEasytrack
             state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
             state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
             trip[:states] << state
+
+            if s.at_xpath('.//questionnaireReport')
+              q = s.xpath('.//questionnaireReport')
+
+              questionnaire = {}
+
+              questionnaire[:questionnaireId] = q.at_xpath('.//questionnaireId').content if q.at_xpath('.//questionnaireId')
+              questionnaire[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+              questionnaire[:timestamp] = q.at_xpath('.//timestamp').content if q.at_xpath('.//timestamp')
+              questionnaire[:questionnaireVersion] = q.at_xpath('.//questionnaireVersion').content if q.at_xpath('.//questionnaireVersion')
+
+              questionnaire[:answers] = []
+
+              q.xpath('.//answer').each do |a|
+                answer = {}
+
+                answer[:questionId] = a.at_xpath('.//questionId').content if a.at_xpath('.//questionId')
+                answer[:answerValue] = a.at_xpath('.//answerValue').content if a.at_xpath('.//answerValue')
+
+                questionnaire[:answers] << answer
+              end
+
+              parsed_file[:questionnaireReport] = questionnaire
+            end
+
           end
 
           parsed_file[:trips] << trip
