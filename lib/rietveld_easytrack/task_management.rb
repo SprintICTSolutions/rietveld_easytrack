@@ -108,14 +108,16 @@ module RietveldEasytrack
             state[:state] = s.at_xpath('.//stateValue').content if s.at_xpath('.//stateValue')
             state[:timestamp] = s.at_xpath('.//timestamp').content if s.at_xpath('.//timestamp')
             state[:position] = {}
-            address = s.at_xpath('.//position/address')
-            state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
-            state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
-            state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
-            state[:position][:city] = address.at_xpath('.//city').content if address.at_xpath('.//city')
-            state[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
-            state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
-            state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
+            if address
+              address = s.at_xpath('.//position/address')
+              state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
+              state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
+              state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
+              state[:position][:city] = address.at_xpath('.//city').content if address.at_xpath('.//city')
+              state[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
+              state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
+              state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
+            end
             trip[:states] << state
 
             if s.at_xpath('.//questionnaireReport')
