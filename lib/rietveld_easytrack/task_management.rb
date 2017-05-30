@@ -108,8 +108,9 @@ module RietveldEasytrack
             state[:state] = s.at_xpath('.//stateValue').content if s.at_xpath('.//stateValue')
             state[:timestamp] = s.at_xpath('.//timestamp').content if s.at_xpath('.//timestamp')
             state[:position] = {}
+
+            address = s.at_xpath('.//position/address')
             if address
-              address = s.at_xpath('.//position/address')
               state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
               state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
               state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
