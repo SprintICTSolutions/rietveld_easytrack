@@ -7,6 +7,8 @@ module RietveldEasytrack
 
     def self.send_file(file, remote_path, secondary = nil)
       begin
+        file_total = 0
+        file_sent = 0
         Net::SCP.upload!(
           self.config(secondary)[:hostname],
           self.config(secondary)[:username],
@@ -15,8 +17,14 @@ module RietveldEasytrack
           :ssh => {
             :password => self.config(secondary)[:password],
             :port => self.config(secondary)[:port]
-          }
-        )
+          },
+          :chunk_size => 1
+        ) do |ch, name, sent, total|
+          STDOUT.puts "\r#{name}: #{sent}/#{total}"
+          file_sent = sent
+          file_total = total
+          sleep 0.1
+        end
       rescue Net::SSH::AuthenticationFailed
         return 'Authentication failed'
       rescue Net::SSH::ConnectionTimeout

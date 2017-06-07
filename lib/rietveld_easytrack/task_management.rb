@@ -220,7 +220,7 @@ module RietveldEasytrack
     end
 
     def self.test
-      self.send_task({
+      self.send_task([{
         operation_id: rand.to_s[2..40],
         asset: {
           code: '9999'
@@ -273,7 +273,7 @@ module RietveldEasytrack
             },
           ]
         }
-      })
+      }])
     end
 
     def self.test_delete(trip_code)
