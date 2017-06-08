@@ -9,22 +9,44 @@ module RietveldEasytrack
       begin
         file_total = 0
         file_sent = 0
-        Net::SCP.upload!(
+
+        # Net::SCP.upload!(
+        #   self.config(secondary)[:hostname],
+        #   self.config(secondary)[:username],
+        #   StringIO.new(file),
+        #   remote_path,
+        #   :ssh => {
+        #     :password => self.config(secondary)[:password],
+        #     :port => self.config(secondary)[:port]
+        #   },
+        #   :chunk_size => 1
+        # ) do |ch, name, sent, total|
+        #   STDOUT.puts "\r#{name}: #{sent}/#{total}"
+        #   file_sent = sent
+        #   file_total = total
+        # end
+
+        Net::SSH.start(
           self.config(secondary)[:hostname],
           self.config(secondary)[:username],
-          StringIO.new(file),
-          remote_path,
-          :ssh => {
-            :password => self.config(secondary)[:password],
-            :port => self.config(secondary)[:port]
-          },
-          :chunk_size => 1
-        ) do |ch, name, sent, total|
-          STDOUT.puts "\r#{name}: #{sent}/#{total}"
-          file_sent = sent
-          file_total = total
-          sleep 0.1
+          :password => self.config(secondary)[:password],
+          :port => self.config(secondary)[:port]
+        ) do |ssh|
+          ssh.exec!("touch #{remote_path} && chmod 200 #{remote_path}")
+
+          ssh.scp().upload!(
+            StringIO.new(file),
+            remote_path
+          ) do |ch, name, sent, total|
+            STDOUT.puts "\r#{name}: #{sent}/#{total}"
+            file_sent = sent
+            file_total = total
+          end
+
+          # ssh.exec!("chmod 777 #{remote_path}")
+
         end
+
       rescue Net::SSH::AuthenticationFailed
         return 'Authentication failed'
       rescue Net::SSH::ConnectionTimeout
