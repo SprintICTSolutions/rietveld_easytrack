@@ -18,8 +18,7 @@ module RietveldEasytrack
           :ssh => {
             :password => self.config(secondary)[:password],
             :port => self.config(secondary)[:port]
-          },
-          :chunk_size => 1
+          }
         ) do |ch, name, sent, total|
           STDOUT.puts "\r#{name}: #{sent}/#{total}"
           file_sent = sent
