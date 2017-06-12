@@ -1,6 +1,6 @@
 module RietveldEasytrack
   class Configuration
-    attr_accessor :hostname_primary, :username_primary, :password_primary, :port_primary, :hostname_secondary, :username_secondary, :password_secondary, :port_secondary, :text_message_write_path, :text_message_read_path, :task_management_write_path, :task_management_read_path, :activity_registration_read_path, :task_management_answer_path
+    attr_accessor :hostname_primary, :username_primary, :password_primary, :port_primary, :hostname_secondary, :username_secondary, :password_secondary, :port_secondary, :text_message_write_path, :text_message_read_path, :task_management_write_path, :task_management_read_path, :activity_registration_read_path, :task_management_answer_path, :tmp_write_dir
 
     def initialize
       @hostname_primary = nil
@@ -21,6 +21,7 @@ module RietveldEasytrack
       @task_management_answer_path = nil
 
       @activity_registration_read_path = nil
+      @tmp_write_dir = nil
     end
   end
 end
