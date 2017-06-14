@@ -25,7 +25,7 @@ module RietveldEasytrack
         #   file_total = total
         # end
 
-        tmp_file = "#{RietveldEasytrack.configuration.tmp_write_dir}#{file_name}"
+        tmp_file = "#{RietveldEasytrack.configuration.tmp_write_dir}.#{file_name}"
         dest_file = "#{remote_path}#{file_name}"
 
         Net::SSH.start(
