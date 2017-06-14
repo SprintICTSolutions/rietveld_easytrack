@@ -25,8 +25,8 @@ module RietveldEasytrack
         #   file_total = total
         # end
 
-        tmp_file = "#{RietveldEasytrack.configuration.tmp_write_dir}#{file_name}"
-        dest_file = "#{remote_path}.#{file_name}"
+        tmp_file = "#{remote_path}.#{file_name}"
+        dest_file = "#{remote_path}#{file_name}"
 
         Net::SSH.start(
           self.config(secondary)[:hostname],
@@ -45,8 +45,8 @@ module RietveldEasytrack
             file_total = total
           end
 
+          # After upload rename file (ready for processing)
           ssh.exec!("mv #{tmp_file} #{dest_file}")
-
         end
 
       rescue Net::SSH::AuthenticationFailed
