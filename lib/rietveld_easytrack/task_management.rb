@@ -142,7 +142,7 @@ module RietveldEasytrack
                 questionnaire[:answers] << answer
               end
 
-              parsed_file[:questionnaireReport] = questionnaire
+              trip[:questionnaireReport] = questionnaire
             end
 
           end
