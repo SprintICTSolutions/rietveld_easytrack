@@ -108,6 +108,7 @@ module RietveldEasytrack
             state[:state] = s.at_xpath('.//stateValue').content if s.at_xpath('.//stateValue')
             state[:timestamp] = s.at_xpath('.//timestamp').content if s.at_xpath('.//timestamp')
             state[:position] = {}
+            state[:kilometrage] = s.at_xpath('.//kilometrage').content if s.at_xpath('.//kilometrage')
 
             address = s.at_xpath('.//position/address')
             if address
@@ -154,7 +155,6 @@ module RietveldEasytrack
         parsed_file[:result] = xml.at_xpath('.//result').content if xml.at_xpath('.//result')
       end
 
-      parsed_file[:kilometrage] = xml.at_xpath('.//kilometrage').content if xml.at_xpath('.//kilometrage')
 
       return parsed_file
     end
