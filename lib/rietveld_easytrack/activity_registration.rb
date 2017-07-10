@@ -22,9 +22,14 @@ module RietveldEasytrack
       parsed_file[:operation_id] = xml.at_xpath('.//operationId').content
       parsed_file[:asset_code] = xml.at_xpath('.//asset/code').content
 
+
       # activity state
       as = xml.xpath('.//update/activityState') if xml.xpath('.//update/activityState')
       as = xml.xpath('.//update/activity') if as.empty?
+
+      if as.at_xpath('.//asset/children') && as.at_xpath('.//asset/children/child/asset/type').content == 'PERSON'
+        parsed_file[:asset_code_driver] = as.at_xpath('.//asset/children/child/asset/code').content
+      end
 
       parsed_file[:activity_code] = as.at_xpath('.//code').content if as.at_xpath('.//code')
       parsed_file[:activity_type] = as.at_xpath('.//activityType').content if as.at_xpath('.//activityType')
