@@ -93,7 +93,7 @@ module RietveldEasytrack
     # Returns array of full path file locations in the given dir
     def self.dir_list(dir, date = nil, ssh_connection)
       all_data = ''
-      ssh_connection.exec!("find #{dir} -mindepth 1 -newermt #{date}") do |channel, stream, data|
+      ssh_connection.exec!("find #{dir} -mindepth 1 -newermt '#{date}'") do |channel, stream, data|
         all_data << data
       end
       return all_data.split("\n")
