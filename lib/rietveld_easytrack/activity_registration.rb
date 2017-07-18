@@ -81,7 +81,7 @@ module RietveldEasytrack
       end_position = as.at_xpath('.//endPosition/address')
       end_position = as.at_xpath('.//endPosition') if end_position.nil?
 
-      if start_position && end_position
+      if start_position
         parsed_file[:start_position] = {}
         parsed_file[:start_position][:street] = start_position.at_xpath('.//street').content if start_position.at_xpath('.//street')
         parsed_file[:start_position][:number] = start_position.at_xpath('.//number').content if start_position.at_xpath('.//number')
@@ -90,7 +90,9 @@ module RietveldEasytrack
         parsed_file[:start_position][:country] = start_position.at_xpath('.//country').content if start_position.at_xpath('.//country')
         parsed_file[:start_position][:latitude] = start_position.at_xpath('.//coordinate/latitude').content if start_position.at_xpath('.//coordinate/latitude')
         parsed_file[:start_position][:longitude] = start_position.at_xpath('.//coordinate/longitude').content if start_position.at_xpath('.//coordinate/longitude')
+      end
 
+      if end_position
         parsed_file[:end_position] = {}
         parsed_file[:end_position][:street] = end_position.at_xpath('.//street').content if end_position.at_xpath('.//street')
         parsed_file[:end_position][:number] = end_position.at_xpath('.//number').content if end_position.at_xpath('.//number')
@@ -99,7 +101,9 @@ module RietveldEasytrack
         parsed_file[:end_position][:country] = end_position.at_xpath('.//country').content if end_position.at_xpath('.//country')
         parsed_file[:end_position][:latitude] = end_position.at_xpath('.//coordinate/latitude').content if end_position.at_xpath('.//coordinate/latitude')
         parsed_file[:end_position][:longitude] = end_position.at_xpath('.//coordinate/longitude').content if end_position.at_xpath('.//coordinate/longitude')
-      elsif address
+      end
+
+      if address && !(start_position && end_position)
         parsed_file[:position] = {}
         parsed_file[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
         parsed_file[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
