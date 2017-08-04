@@ -111,15 +111,15 @@ module RietveldEasytrack
             state[:position] = {}
             state[:kilometrage] = s.at_xpath('.//kilometrage').content if s.at_xpath('.//kilometrage')
 
-            address = s.at_xpath('.//position/address')
-            if address
-              state[:position][:street] = address.at_xpath('.//street').content if address.at_xpath('.//street')
-              state[:position][:number] = address.at_xpath('.//number').content if address.at_xpath('.//number')
-              state[:position][:zipcode] = address.at_xpath('.//zipcode').content if address.at_xpath('.//zipcode')
-              state[:position][:city] = address.at_xpath('.//city').content if address.at_xpath('.//city')
-              state[:position][:country] = address.at_xpath('.//country').content if address.at_xpath('.//country')
-              state[:position][:latitude] = address.at_xpath('.//coordinate/latitude').content if address.at_xpath('.//coordinate/latitude')
-              state[:position][:longitude] = address.at_xpath('.//coordinate/longitude').content if address.at_xpath('.//coordinate/longitude')
+            pos = s.at_xpath('.//position')
+            if pos
+              state[:position][:street] = pos.at_xpath('.//address/street').content if pos.at_xpath('.//address/street')
+              state[:position][:number] = pos.at_xpath('.//address/number').content if pos.at_xpath('.//address/number')
+              state[:position][:zipcode] = pos.at_xpath('.//address/zipcode').content if pos.at_xpath('.//address/zipcode')
+              state[:position][:city] = pos.at_xpath('.//address/city').content if pos.at_xpath('.//address/city')
+              state[:position][:country] = pos.at_xpath('.//address/country').content if pos.at_xpath('.//address/country')
+              state[:position][:latitude] = pos.at_xpath('.//coordinate/latitude').content if pos.at_xpath('.//coordinate/latitude')
+              state[:position][:longitude] = pos.at_xpath('.//coordinate/longitude').content if pos.at_xpath('.//coordinate/longitude')
             end
             trip[:states] << state
 
