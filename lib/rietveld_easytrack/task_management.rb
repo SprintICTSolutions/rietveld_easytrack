@@ -79,7 +79,7 @@ module RietveldEasytrack
           }
         }
       end
-      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path, 'test.xml')
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path, 'delete.xml')
       return builder.doc.to_xml
     end
 
