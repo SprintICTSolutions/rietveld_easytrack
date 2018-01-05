@@ -62,25 +62,38 @@ module RietveldEasytrack
       tasks
     end
 
-    def self.delete_task(params)
-      params = task_management_delete_params(params)
-      builder = Nokogiri::XML::Builder.new do |xml|
-        xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-          'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
-          'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
-          xml.operationId params[:operation_id]
-          xml.asset {
-            xml.code params[:asset][:code]
-          }
-          xml.delete {
-            xml.trip {
-              xml.code params[:trip][:code]
+    def self.delete_task(tasks)
+      # Make sure tasks is an array
+      tasks = Array(tasks)
+
+      xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
+
+      xml_tasks = ''
+
+      tasks.each do |params|
+        params = task_management_delete_params(params)
+        builder = Nokogiri::XML::Builder.new do |xml|
+          xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+            'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
+            'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
+            xml.operationId params[:operation_id]
+            xml.asset {
+              xml.code params[:asset][:code]
+            }
+            xml.delete {
+              xml.trip {
+                xml.code params[:trip][:code]
+              }
             }
           }
-        }
+        end
+        xml_tasks << builder.doc.root.to_xml
       end
-      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.task_management_write_path, 'delete.xml')
-      return builder.doc.to_xml
+      xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if tasks.length > 1
+
+      xml << xml_tasks
+      RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "delete_#{Time.now.iso8601.to_s}.xml")
+      return xml.to_xml
     end
 
     def self.parse(xml)
@@ -279,7 +292,7 @@ module RietveldEasytrack
     end
 
     def self.test_delete(trip_code)
-      self.delete_task({
+      self.delete_task([{
         operation_id: rand.to_s[2..40],
         asset: {
           code: '9999'
@@ -287,7 +300,15 @@ module RietveldEasytrack
         trip: {
           code: trip_code.to_s,
         }
-      })
+      }, {
+        operation_id: rand.to_s[2..40],
+        asset: {
+          code: '9999'
+        },
+        trip: {
+          code: trip_code.to_s,
+        }
+      }])
     end
 
     def self.task_management_params(params)
