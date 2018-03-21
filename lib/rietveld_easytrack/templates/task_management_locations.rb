@@ -5,15 +5,9 @@ xml.operation('xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/201
     xml.code params[:asset][:code]
   }
   xml.update {
-    xml.updateMode 'replace'
     xml.trips {
-      xml.trip {
+      xml.locationsTrip {
         xml.code params[:trip][:code]
-        xml.name params[:trip][:name]
-        xml.description params[:trip][:description]
-        xml.sequence params[:trip][:sequence]
-        xml.plannedStart params[:trip][:planned_start] if params[:trip][:planned_start]
-        xml.plannedFinish params[:trip][:planned_finish] if params[:trip][:planned_finish]
         xml.locations {
           for location in params[:trip][:locations]
             xml.location{
