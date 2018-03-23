@@ -19,8 +19,11 @@ module RietveldEasytrack
 
       xml_tasks = ''
 
+	  puts tasks.inspect
+
       tasks.each do |params|
         params = task_management_params(params)
+        puts params
         builder = Nokogiri::XML::Builder.new do |xml|
           eval template
         end
