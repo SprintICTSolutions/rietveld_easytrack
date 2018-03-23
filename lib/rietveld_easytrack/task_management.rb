@@ -32,6 +32,7 @@ module RietveldEasytrack
 
       xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if tasks.length > 1
 
+	  puts xml_tasks
       xml << xml_tasks
 
 	  puts "tasks_#{Time.now.iso8601.to_s}.xml"
