@@ -9,8 +9,10 @@ module RietveldEasytrack
       tasks = Array(tasks)
 
       if location_update
+      	  puts 'location_update template'
         template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
       else
+      	  puts 'normal template'
         template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       end
       xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
@@ -29,6 +31,7 @@ module RietveldEasytrack
 
       xml << xml_tasks
 
+	  puts "tasks_#{Time.now.iso8601.to_s}.xml"
       RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{Time.now.iso8601.to_s}.xml")
       return xml.to_xml
     end
