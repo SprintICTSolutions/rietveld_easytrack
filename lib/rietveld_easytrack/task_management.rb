@@ -36,7 +36,7 @@ module RietveldEasytrack
       xml << xml_tasks
 
 	  puts "tasks_#{Time.now.iso8601.to_s}.xml"
-      RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{Time.now.iso8601.to_s}.xml")
+      RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{Time.now.iso8601(6).to_s}.xml")
       return xml.to_xml
     end
 
