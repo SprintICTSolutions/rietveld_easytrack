@@ -8,10 +8,6 @@ module RietveldEasytrack
       # Make sure tasks is an array
       tasks = Array(tasks)
 
-      if location_update
-        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
-      end
-
       if template_string.nil?
         template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       elsif (template_string == 'locations_update')
@@ -20,6 +16,10 @@ module RietveldEasytrack
         template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_tasks.rb'))
       end
       template ||= File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
+
+      if location_update
+        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
+      end
 
       xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
 
