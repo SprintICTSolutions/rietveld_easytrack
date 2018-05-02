@@ -3,16 +3,24 @@ require 'fileutils'
 module RietveldEasytrack
   module TaskManagement
 
-    def self.send_task(tasks, location_update = false)
+    def self.send_task(tasks, location_update = false, template_string = nil)
       raise ArgumentError, 'Data invalid, please check your data' if tasks.empty?
       # Make sure tasks is an array
       tasks = Array(tasks)
 
       if location_update
         template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
-      else
-        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       end
+
+      if template_string.nil?
+        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
+      elsif (template_string == 'locations_update')
+        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
+      elsif (template_string == 'tasks_update')
+        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_tasks.rb'))
+      end
+      template ||= File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
+
       xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
 
       xml_tasks = ''
@@ -27,7 +35,6 @@ module RietveldEasytrack
 
       xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if tasks.length > 1
 
-	  puts xml_tasks
       xml << xml_tasks
 
       RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{Time.now.iso8601(6).to_s}.xml")
