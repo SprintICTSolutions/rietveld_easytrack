@@ -3,24 +3,16 @@ require 'fileutils'
 module RietveldEasytrack
   module TaskManagement
 
-    def self.send_task(tasks, location_update = false, template_string = nil)
+    def self.send_task(tasks, location_update = false)
       raise ArgumentError, 'Data invalid, please check your data' if tasks.empty?
       # Make sure tasks is an array
       tasks = Array(tasks)
 
-      if template_string.nil?
-        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
-      elsif (template_string == 'locations_update')
-        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
-      elsif (template_string == 'tasks_update')
-        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_tasks.rb'))
-      end
-      template ||= File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
-
       if location_update
         template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_locations.rb'))
+      else
+        template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
       end
-
       xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
 
       xml_tasks = ''
