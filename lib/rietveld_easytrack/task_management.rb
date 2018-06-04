@@ -40,6 +40,10 @@ module RietveldEasytrack
       dir.each do |file|
         xml = Nokogiri::XML(file)
         xml = xml.remove_namespaces!.root
+        puts '--- read from device tasks ---'
+        puts xml
+        puts '---'
+        next if xml.nil?
         xml.xpath('//operation').each do |operation|
           tasks << parse(operation)
         end
@@ -97,6 +101,34 @@ module RietveldEasytrack
 
       xml << xml_tasks
       RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "delete_#{Time.now.iso8601.to_s}.xml")
+      return xml.to_xml
+    end
+
+    def delete_task_on_location(task)
+      xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
+
+      xml_task = ''
+
+      params = delete_task_on_location_params(task)
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.operation('xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+          'xsi:schemaLocation' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02 ../../resources/xsd/task-management-201102-easytrack.xsd',
+          'xmlns' => 'http://www.easytrack.nl/integration/taskmanagement/2011/02') {
+          xml.operationId params[:operation_id]
+          xml.asset {
+            xml.code params[:asset][:code]
+          }
+          xml.delete {
+            xml.task {
+              xml.code params[:task][:code]
+            }
+          }
+        }
+        xml_task << builder.doc.root.to_xml
+      end
+
+      xml << xml_task
+      RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "delete_task_on_location_#{Time.now.iso8601.to_s}.xml")
       return xml.to_xml
     end
 
@@ -401,5 +433,23 @@ module RietveldEasytrack
       params
     end
 
+    def self.delete_task_on_location_params(params)
+      validations = {
+        operation_id: 'string',
+        asset: {
+          code: 'string'
+        },
+        task: {
+          code: 'string',
+        }
+      }
+
+      # Validate root
+      validate = HashValidator.validate(params, validations)
+
+      raise ArgumentError, validate.errors unless validate.valid?
+
+      params
+    end
   end
 end
