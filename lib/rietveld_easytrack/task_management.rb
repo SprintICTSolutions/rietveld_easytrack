@@ -121,7 +121,7 @@ module RietveldEasytrack
             }
           }
         }
-        xml_task << builder.doc.root.to_xml
+        xml_task = builder.doc.root.to_xml
       end
 
       xml << xml_task
