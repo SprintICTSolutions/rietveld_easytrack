@@ -40,9 +40,6 @@ module RietveldEasytrack
       dir.each do |file|
         xml = Nokogiri::XML(file)
         xml = xml.remove_namespaces!.root
-        puts '--- read from device tasks ---'
-        puts xml
-        puts '---'
         next if xml.nil?
         xml.xpath('//operation').each do |operation|
           tasks << parse(operation)

@@ -70,6 +70,7 @@ module RietveldEasytrack
           file_names = self.dir_list(path, date, ssh)
           file_names.each do |fn|
             files << self.read_file(fn, ssh)
+            puts "read_file: #{fn}"
           end
           return files
         end
