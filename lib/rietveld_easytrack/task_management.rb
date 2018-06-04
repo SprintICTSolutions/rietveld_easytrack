@@ -104,7 +104,7 @@ module RietveldEasytrack
       return xml.to_xml
     end
 
-    def delete_task_on_location(task)
+    def self.delete_task_on_location(task)
       xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
 
       xml_task = ''
