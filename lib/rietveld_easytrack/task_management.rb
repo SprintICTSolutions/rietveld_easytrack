@@ -121,8 +121,8 @@ module RietveldEasytrack
             }
           }
         }
-        xml_task = builder.doc.root.to_xml
       end
+      xml_task = builder.doc.root.to_xml
 
       xml << xml_task
       RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "delete_task_on_location_#{Time.now.iso8601.to_s}.xml")
