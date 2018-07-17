@@ -44,6 +44,8 @@ module RietveldEasytrack
       xml_tasks = ''
 
       tasks.each do |asset_code, asset_tasks|
+        puts 'ffffffffff'
+        puts asset_code
 
         asset_tasks.each do |params|
           params = task_management_params(params)
@@ -53,11 +55,12 @@ module RietveldEasytrack
           xml_tasks << builder.doc.root.to_xml
         end
 
-        xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if tasks.length > 1
+        xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if asset_tasks.length > 1
 
         xml << xml_tasks
 
         RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{asset_code}_#{Time.now.iso8601(6).to_s}.xml")
+        puts 'ffffffffff'
       end
       return ''
     end

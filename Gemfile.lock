@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rietveld_easytrack (0.1.0)
+    rietveld_easytrack (0.2.0)
       hash_validator
       net-scp
       net-ssh
@@ -30,4 +30,4 @@ DEPENDENCIES
   rietveld_easytrack!
 
 BUNDLED WITH
-   1.13.7
+   1.15.3
