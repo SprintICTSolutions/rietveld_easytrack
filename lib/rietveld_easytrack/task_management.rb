@@ -45,9 +45,8 @@ module RietveldEasytrack
 
       tasks.each do |asset_code, asset_tasks|
         puts 'ffffffffff'
-        puts asset_code
 
-        asset_tasks.each do |op_ip, params|
+        asset_tasks.each do |params|
           params = task_management_params(params)
           builder = Nokogiri::XML::Builder.new do |xml|
             eval template
