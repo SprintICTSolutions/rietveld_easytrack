@@ -33,6 +33,35 @@ module RietveldEasytrack
       return xml.to_xml
     end
 
+    def self.send_task_by_asset_code(tasks)
+      # raise ArgumentError, 'Data invalid, please check your data' if tasks.empty?
+      # Make sure tasks is an array
+      # tasks = Array(tasks)
+
+      template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management.rb'))
+      xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?>')
+
+      xml_tasks = ''
+
+      tasks.each do |asset_code, asset_tasks|
+
+        asset_tasks.each do |params|
+          params = task_management_params(params)
+          builder = Nokogiri::XML::Builder.new do |xml|
+            eval template
+          end
+          xml_tasks << builder.doc.root.to_xml
+        end
+
+        xml_tasks = "<operationBatch xmlns=\"http://www.easytrack.nl/integration/taskmanagement/2011/02\">#{xml_tasks}</operationBatch>" if tasks.length > 1
+
+        xml << xml_tasks
+
+        RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{asset_code}_#{Time.now.iso8601(6).to_s}.xml")
+      end
+      return ''
+    end
+
     def self.read_tasks(from_date = nil)
       tasks = []
       dir = RietveldEasytrack::Connection.read_files(RietveldEasytrack.configuration.task_management_read_path, from_date)
