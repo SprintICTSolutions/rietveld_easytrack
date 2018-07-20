@@ -40,19 +40,17 @@ module RietveldEasytrack
 
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/task_management_trip.rb'))
 
-
       grouped_tasks = {}
 
-      tasks.each do |asset_code, asset_tasks|
+      tasks.each do |task|
+        asset_code = task[:asset][:code]
         grouped_tasks[asset_code] ||= ''
 
-        asset_tasks.each do |op_id, task|
-          params = task_management_params(task)
-          builder = Nokogiri::XML::Builder.new do |xml|
-            eval template
-          end
-          grouped_tasks[asset_code] << builder.doc.root.to_xml
+        params = task_management_params(task)
+        builder = Nokogiri::XML::Builder.new do |xml|
+          eval template
         end
+        grouped_tasks[asset_code] << builder.doc.root.to_xml
       end
       grouped_tasks.each do |asset_code, asset_xml|
         operation_id = "#{asset_code}_bulk_#{Time.now.iso8601(6).to_s}"
