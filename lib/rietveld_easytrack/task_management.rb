@@ -54,7 +54,7 @@ module RietveldEasytrack
       end
       grouped_tasks.each do |asset_code, asset_xml|
         operation_id = "#{asset_code}_bulk_#{Time.now.iso8601(6).to_s}"
-        xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?><operation xmlns="http://www.easytrack.nl/integration/taskmanagement/2011/02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><operationId>' + operation_id + '</operationId><asset><code>9999</code></asset><update><trips>' + asset_xml + '</trips></update></operation>')
+        xml = Nokogiri::XML('<?xml version = "1.0" encoding = "UTF-8" standalone ="no"?><operation xmlns="http://www.easytrack.nl/integration/taskmanagement/2011/02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><operationId>' + operation_id + '</operationId><asset><code>' + asset_code + '</code></asset><update><trips>' + asset_xml + '</trips></update></operation>')
 
         RietveldEasytrack::Connection.send_file(xml.to_xml, RietveldEasytrack.configuration.task_management_write_path, "tasks_#{asset_code}_#{Time.now.iso8601(6).to_s}.xml")
 
