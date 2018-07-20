@@ -10,21 +10,6 @@ module RietveldEasytrack
         file_total = 0
         file_sent = 0
 
-        # Net::SCP.upload!(
-        #   self.config(secondary)[:hostname],
-        #   self.config(secondary)[:username],
-        #   StringIO.new(file),
-        #   remote_path,
-        #   :ssh => {
-        #     :password => self.config(secondary)[:password],
-        #     :port => self.config(secondary)[:port]
-        #   }
-        # ) do |ch, name, sent, total|
-        #   STDOUT.puts "\r#{name}: #{sent}/#{total}"
-        #   file_sent = sent
-        #   file_total = total
-        # end
-
         tmp_file = "#{remote_path}.#{file_name}"
         dest_file = "#{remote_path}#{file_name}"
 
@@ -59,6 +44,52 @@ module RietveldEasytrack
         raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
         STDERR.puts 'Something went wrong, trying secondary server'
         return self.send_file(file, remote_path, file_name, true)
+      end
+    end
+
+    def self.send_files(files, secondary = nil)
+      begin
+        Net::SSH.start(
+          self.config(secondary)[:hostname],
+          self.config(secondary)[:username],
+          :password => self.config(secondary)[:password],
+          :port => self.config(secondary)[:port]
+        ) do |ssh|
+          files.each do |file|
+            file_total = 0
+            file_sent = 0
+
+            remote_path = file[:path]
+            file_name = file[:file_name]
+            file = file[:file]
+
+            tmp_file = "#{remote_path}.#{file_name}"
+            dest_file = "#{remote_path}#{file_name}"
+
+            ssh.scp().upload!(
+              StringIO.new(file),
+              tmp_file
+            ) do |ch, name, sent, total|
+              STDOUT.puts "\r#{name}: #{sent}/#{total}"
+              file_sent = sent
+              file_total = total
+            end
+
+            # After upload rename file (ready for processing)
+            ssh.exec!("mv #{tmp_file} #{dest_file}")
+          end
+        end
+
+      rescue Net::SSH::AuthenticationFailed
+        return 'Authentication failed'
+      rescue Net::SSH::ConnectionTimeout
+        raise 'Connection timeout' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
+        return self.send_files(files, true)
+      rescue Exception => e
+        STDERR.puts e
+        raise 'Something went wrong' if secondary || (self.config(true)[:hostname].nil? || self.config(true)[:hostname].empty?)
+        STDERR.puts 'Something went wrong, trying secondary server'
+        return self.send_files(files, true)
       end
     end
 
