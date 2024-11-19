@@ -13,8 +13,8 @@ module RietveldEasytrack
 
     def self.read_messages(from_date = nil)
       messages = []
-      RietveldEasytrack::Connection.dir_list('/home/erwin/easytrack/integration/from-device/text-messaging', from_date).each do |filename|
-        xml = Nokogiri::XML(RietveldEasytrack::Connection.read_file(filename))
+      RietveldEasytrack::Connection.read_files('/home/erwin/easytrack/integration/from-device/text-messaging', from_date).each do |file|
+        xml = Nokogiri::XML(file)
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
           messages << parse(operation)

@@ -30,8 +30,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "nokogiri"
   spec.add_dependency "hash_validator"
-  spec.add_dependency "net-scp"
-  spec.add_dependency "net-ssh"
+  spec.add_dependency "net-sftp"
 
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"

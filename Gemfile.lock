@@ -3,20 +3,21 @@ PATH
   specs:
     rietveld_easytrack (0.2.0)
       hash_validator
-      net-scp
-      net-ssh
+      net-sftp
       nokogiri
 
 GEM
   remote: https://rubygems.org/
   specs:
     hash_validator (0.7.0)
-    mini_portile2 (2.1.0)
-    net-scp (1.2.1)
+    mini_portile2 (2.8.8)
+    net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (4.1.0)
-    nokogiri (1.7.0.1)
-      mini_portile2 (~> 2.1.0)
+    net-ssh (7.3.0)
+    nokogiri (1.13.10)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    racc (1.8.1)
     rake (10.4.2)
 
 PLATFORMS
@@ -24,10 +25,11 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.13)
-  hash_validator
-  nokogiri
+  hash_validator (>= 0.7.0)
+  net-sftp (= 2.1.2)
+  nokogiri (>= 1.8.0)
   rake (~> 10.0)
   rietveld_easytrack!
 
 BUNDLED WITH
-   1.15.3
+   1.17.3

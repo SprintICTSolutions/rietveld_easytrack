@@ -95,15 +95,10 @@ Configuration must be done in your project
 
 ```ruby
 RietveldEasytrack.configure do |config|
-  config.hostname_primary = ''
-  config.username_primary = ''
-  config.password_primary = ''
-  config.port_primary = ''
-
-  config.hostname_secondary = ''
-  config.username_secondary = ''
-  config.password_secondary = ''
-  config.port_secondary = ''
+  config.hostname = ''
+  config.username = ''
+  config.password = ''
+  config.port = ''
 
   config.text_messages_write_path = ''
   config.text_messages_read_path = ''
@@ -118,7 +113,7 @@ end
 The keys are available to you throughout your application as:
 
 ```ruby
-RietveldEasytrack.configuration.hostname_primary
+RietveldEasytrack.configuration.hostname
 ```
 
 # Development
@@ -136,20 +131,17 @@ To help set the configuration during development, create the following file: 'li
 ```ruby
 module DevSettings
   def self.set
-    RietveldEasytrack.configuration.hostname_primary = ''
-    RietveldEasytrack.configuration.username_primary = ''
-    RietveldEasytrack.configuration.password_primary = ''
-    RietveldEasytrack.configuration.port_primary = ''
-
-    RietveldEasytrack.configuration.hostname_secondary = ''
-    RietveldEasytrack.configuration.username_secondary = ''
-    RietveldEasytrack.configuration.password_secondary = ''
-    RietveldEasytrack.configuration.port_secondary = ''
+    RietveldEasytrack.configuration.hostname = ''
+    RietveldEasytrack.configuration.username = ''
+    RietveldEasytrack.configuration.password = ''
+    RietveldEasytrack.configuration.port = ''
 
     RietveldEasytrack.configuration.text_message_write_path = ''
     RietveldEasytrack.configuration.text_message_read_path = ''
+
     RietveldEasytrack.configuration.task_management_write_path = ''
     RietveldEasytrack.configuration.task_management_read_path = ''
+
     RietveldEasytrack.configuration.activity_registration_read_path = ''
   end
 end
