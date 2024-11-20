@@ -33,19 +33,19 @@ module RietveldEasytrack
       message_state = xml.at_xpath('//messageState')
       unless message_state.nil?
         parsed_file[:message_state] = {}
-        parsed_file[:message_state][:code] = message_state.at_xpath('//code').content
-        parsed_file[:message_state][:state] = message_state.at_xpath('//state').content
-        parsed_file[:message_state][:timestamp] = message_state.at_xpath('//timestamp').content
+        parsed_file[:message_state][:code] = message_state.at_xpath('//code')&.content
+        parsed_file[:message_state][:state] = message_state.at_xpath('//state')&.content
+        parsed_file[:message_state][:timestamp] = message_state.at_xpath('//timestamp')&.content
       end
 
       # Reply message
       message = xml.at_xpath('//send')
       unless message.nil?
         parsed_file[:message] = {}
-        parsed_file[:message][:code] = message.at_xpath('//code').content
-        parsed_file[:message][:content] = message.at_xpath('//content').content
-        parsed_file[:message][:timestamp] = message.at_xpath('//timestamp').content
-        parsed_file[:message][:reply_to] = message.at_xpath('//replyTo/code').content
+        parsed_file[:message][:code] = message.at_xpath('//code')&.content
+        parsed_file[:message][:content] = message.at_xpath('//content')&.content
+        parsed_file[:message][:timestamp] = message.at_xpath('//timestamp')&.content
+        parsed_file[:message][:reply_to] = message.at_xpath('//replyTo/code')&.content
       end
       return parsed_file
     end
