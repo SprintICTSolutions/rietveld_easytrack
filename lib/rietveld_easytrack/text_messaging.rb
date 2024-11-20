@@ -3,17 +3,24 @@ module RietveldEasytrack
 
     def self.send_message(param)
       params = text_messaging_params(param)
+
       template = File.read(File.join(RietveldEasytrack.root, '/lib/rietveld_easytrack/templates/text_messaging.rb'))
       builder = Nokogiri::XML::Builder.new do |xml|
         eval template
       end
-      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, '/home/erwin/easytrack/integration/to-device/text-messaging', 'test.xml')
+
+      asset_code = params[:asset][:code]
+      timestamp = Time.now.iso8601(6).to_s
+
+      filename = "text_messaging_#{asset_code}_#{timestamp}.xml"
+      RietveldEasytrack::Connection.send_file(builder.doc.to_xml, RietveldEasytrack.configuration.text_message_write_path, filename)
+
       return builder.doc.to_xml
     end
 
     def self.read_messages(from_date = nil)
       messages = []
-      RietveldEasytrack::Connection.read_files('/home/erwin/easytrack/integration/from-device/text-messaging', from_date).each do |file|
+      RietveldEasytrack::Connection.read_files(RietveldEasytrack.configuration.text_message_read_path, from_date).each do |file|
         xml = Nokogiri::XML(file)
         xml = xml.remove_namespaces!.root
         xml.xpath('//operation').each do |operation|
